@@ -1,5 +1,4 @@
 package com.example.mapleleafcd.database;
-
 public class Const {
     public static final String DB_NAME = "dvirtuemd";
     public static final String DB_USER = "dvirtue";
