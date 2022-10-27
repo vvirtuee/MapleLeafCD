@@ -3,7 +3,7 @@ package com.example.mapleleafcd.login;
 import java.io.*;
 
 public class LoginSystem {
-    File file = new File("C:\\Users\\virtue\\IdeaProjects\\MapleLeafCD\\MapleLeafCD\\src\\main\\resources\\files\\accounts");
+    File file = new File("accounts");
     String[] credentials = {};
     //authenticate function
 
@@ -31,6 +31,20 @@ public class LoginSystem {
             }
         }
         return correctPassword;
+    }
+
+    public void addAccount(String username, String password){
+        try{
+            FileWriter fw = new FileWriter(file.getName(), true);
+            String str = "username:   " + username + "\npassword:   " + password + "\n";
+            System.out.println(str);
+
+            fw.write(str);
+            fw.close();
+            System.out.println("successfully wrote to file");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 }

@@ -44,6 +44,8 @@ public class HelloApplication extends Application {
             System.out.println(passwordAccepted);
         });
 
+        ls.addAccount("dfdf","sdf");
+
         VBox v = new VBox();
         v.getChildren().addAll(hb1,hb2, b);
 
