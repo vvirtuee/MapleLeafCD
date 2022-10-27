@@ -25,7 +25,7 @@ public class HelloApplication extends Application {
 
 
         /** admin system **/
-        LoginSystem ls = new LoginSystem();
+        LoginSystem ls = new LoginSystem(); //Instantiate new Login System
 
         Label label1 = new Label("username: ");
         TextField username = new TextField();
@@ -72,7 +72,7 @@ public class HelloApplication extends Application {
         TabPane tabPane = new TabPane();
         tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), itemStats.getInstance());
         pane.setCenter(tabPane);
-        pane.setBottom(v);
+        pane.setBottom(v);  //location of VBox to be changed.
 
 
 
