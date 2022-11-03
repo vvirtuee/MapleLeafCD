@@ -6,9 +6,14 @@ import com.example.mapleleafcd.tabs.addItem;
 import com.example.mapleleafcd.tabs.itemStats;
 import com.example.mapleleafcd.tabs.removeItem;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -24,30 +29,59 @@ public class HelloApplication extends Application {
         BorderPane pane = new BorderPane();
 
 
+
         /** admin system **/
         LoginSystem ls = new LoginSystem(); //Instantiate new Login System
 
-        Label label1 = new Label("username: ");
-        TextField username = new TextField();
-        HBox hb1 = new HBox();
-        hb1.getChildren().addAll(label1, username);
+        /*
+        public static final String DB_NAME = "dvirtuemd";
+        public static final String DB_USER = "dvirtue";
+        public static final String DB_PASSWORD = "dx316dx316cpxwccpxwc";
+        public static final String DB_LOGINPASS = "tknzstknzs";
+         */
 
-        Label label2 = new Label("password: ");
-        TextField password = new TextField();
-        HBox hb2 = new HBox();
-        hb2.getChildren().addAll(label2, password);
+        ImageView logoContainer = new ImageView(new Image(HelloApplication.class.getResourceAsStream("/images/image.png")));
 
-        Button b = new Button("Login");
+        logoContainer.setFitWidth(250);
+        logoContainer.setFitHeight(250);
 
+        Label databaseNameLabel = new Label("Database Name:");
+        Label databaseUsernameLabel = new Label("Database Username:");
+        Label databasePasswordLabel = new Label("Database Password:");
+        Label databaseLoginPassLabel = new Label("Database Login Password:");
+        TextField DBName = new TextField();
+        TextField DBUsername = new TextField();
+        TextField DBPassword = new TextField();
+        TextField DBLoginPassword = new TextField();
+
+        /*
         b.setOnAction(e->{
             boolean passwordAccepted = ls.authenticate(username.getText(), password.getText());
             System.out.println(passwordAccepted);
         });
+         */
 
         ls.addAccount("dfdf","sdf");
 
-        VBox v = new VBox();
-        v.getChildren().addAll(hb1,hb2, b);
+        GridPane signInStructure = new GridPane();
+        signInStructure.add(databaseNameLabel,0,0);
+        signInStructure.add(databaseUsernameLabel,0,1);
+        signInStructure.add(databasePasswordLabel,0,2);
+        signInStructure.add(databaseLoginPassLabel,0,3);
+        signInStructure.add(DBName,1,0);
+        signInStructure.add(DBUsername,1,1);
+        signInStructure.add(DBPassword,1,2);
+        signInStructure.add(DBLoginPassword,1,3);
+        signInStructure.setAlignment(Pos.CENTER);
+        signInStructure.setHgap(10);
+        signInStructure.setVgap(10);
+
+        Button signInBtn = new Button("Login");
+
+        VBox signIn = new VBox();
+        signIn.setAlignment(Pos.CENTER);
+        signIn.setSpacing(10);
+        signIn.getChildren().addAll(logoContainer, signInStructure, signInBtn);
 
         //boolean passwordAccepted = ls.authenticate(username,password);
         //System.out.println(passwordAccepted);
@@ -73,8 +107,8 @@ public class HelloApplication extends Application {
         //create a tabpane
         TabPane tabPane = new TabPane();
         tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), itemStats.getInstance());
-        pane.setCenter(tabPane);
-        pane.setBottom(v);  //location of VBox to be changed.
+        pane.setTop(signIn);
+        //pane.setBottom(v);  //location of VBox to be changed.
 
 
 
