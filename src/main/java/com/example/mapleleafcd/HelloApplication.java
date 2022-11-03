@@ -16,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -24,26 +25,14 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class HelloApplication extends Application {
+
     @Override
     public void start(Stage stage) throws IOException {
         BorderPane pane = new BorderPane();
 
-
-
-        /** admin system **/
-        LoginSystem ls = new LoginSystem(); //Instantiate new Login System
-
-        /*
-        public static final String DB_NAME = "dvirtuemd";
-        public static final String DB_USER = "dvirtue";
-        public static final String DB_PASSWORD = "dx316dx316cpxwccpxwc";
-        public static final String DB_LOGINPASS = "tknzstknzs";
-         */
-
-        ImageView logoContainer = new ImageView(new Image(HelloApplication.class.getResourceAsStream("/images/image.png")));
-
+        ImageView logoContainer = new ImageView(new Image(HelloApplication.class.getResourceAsStream("/images/logo.png")));
         logoContainer.setFitWidth(250);
-        logoContainer.setFitHeight(250);
+        logoContainer.setFitHeight(125);
 
         Label databaseNameLabel = new Label("Database Name:");
         Label databaseUsernameLabel = new Label("Database Username:");
@@ -51,17 +40,9 @@ public class HelloApplication extends Application {
         Label databaseLoginPassLabel = new Label("Database Login Password:");
         TextField DBName = new TextField();
         TextField DBUsername = new TextField();
-        TextField DBPassword = new TextField();
-        TextField DBLoginPassword = new TextField();
 
-        /*
-        b.setOnAction(e->{
-            boolean passwordAccepted = ls.authenticate(username.getText(), password.getText());
-            System.out.println(passwordAccepted);
-        });
-         */
-
-        ls.addAccount("dfdf","sdf");
+        PasswordField DBPassword = new PasswordField();
+        PasswordField DBLoginPassword = new PasswordField();
 
         GridPane signInStructure = new GridPane();
         signInStructure.add(databaseNameLabel,0,0);
@@ -78,10 +59,37 @@ public class HelloApplication extends Application {
 
         Button signInBtn = new Button("Login");
 
+        /** admin system **/
+        LoginSystem ls = new LoginSystem(); //Instantiate new Login System
+
+        Text loginSpoilerText = new Text();
+        loginSpoilerText.setVisible(false);
+
+
+
+        signInBtn.setOnAction(e->{
+            if(Const.DB_NAME.equals(DBName.getText()) && Const.DB_USER.equals(DBUsername.getText()) && Const.DB_PASSWORD.equals(DBPassword.getText()) && Const.DB_LOGINPASS.equals(DBLoginPassword.getText())){
+                ls.addAccount(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
+            }
+            boolean passwordAccepted = ls.authenticate(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
+            System.out.println(passwordAccepted);
+            if(!passwordAccepted){
+                loginSpoilerText.setVisible(true);
+                loginSpoilerText.setFill(Paint.valueOf("FF0000"));
+                loginSpoilerText.setText("Incorrect password. Please try again!");
+            }else{
+                //enter system
+                loginSpoilerText.setVisible(true);
+                loginSpoilerText.setFill(Paint.valueOf("00FF00"));
+                loginSpoilerText.setText("Correct password. Logging into database.");
+            }
+        });
+
         VBox signIn = new VBox();
+        signIn.setPadding(new Insets(125,0,0,0));
         signIn.setAlignment(Pos.CENTER);
         signIn.setSpacing(10);
-        signIn.getChildren().addAll(logoContainer, signInStructure, signInBtn);
+        signIn.getChildren().addAll(logoContainer, signInStructure, signInBtn, loginSpoilerText);
 
         //boolean passwordAccepted = ls.authenticate(username,password);
         //System.out.println(passwordAccepted);
