@@ -57,4 +57,6 @@ public class Database {
             e.printStackTrace();
         }
     }
+
+    public Connection getConnection(){return connection;}
 }

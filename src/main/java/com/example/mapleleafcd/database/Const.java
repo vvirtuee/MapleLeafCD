@@ -1,9 +1,9 @@
 package com.example.mapleleafcd.database;
 public class Const {
-    public static final String DB_NAME = "dvirtuemd";
-    public static final String DB_USER = "dvirtue";
-    public static final String DB_PASSWORD = "dx316dx316cpxwccpxwc";
-    public static final String DB_LOGINPASS = "tknzstknzs";
+    public static final String DB_NAME = "aarnautjava";
+    public static final String DB_USER = "aarnaut";
+    public static final String DB_PASSWORD = "81zn381zn3q1j7dq1j7d";
+    public static final String DB_LOGINPASS = "9b54w9b54w";
 
 
 }

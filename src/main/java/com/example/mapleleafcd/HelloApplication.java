@@ -67,23 +67,7 @@ public class HelloApplication extends Application {
 
 
 
-        signInBtn.setOnAction(e->{
-            if(Const.DB_NAME.equals(DBName.getText()) && Const.DB_USER.equals(DBUsername.getText()) && Const.DB_PASSWORD.equals(DBPassword.getText()) && Const.DB_LOGINPASS.equals(DBLoginPassword.getText())){
-                ls.addAccount(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
-            }
-            boolean passwordAccepted = ls.authenticate(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
-            System.out.println(passwordAccepted);
-            if(!passwordAccepted){
-                loginSpoilerText.setVisible(true);
-                loginSpoilerText.setFill(Paint.valueOf("FF0000"));
-                loginSpoilerText.setText("Incorrect password. Please try again!");
-            }else{
-                //enter system
-                loginSpoilerText.setVisible(true);
-                loginSpoilerText.setFill(Paint.valueOf("00FF00"));
-                loginSpoilerText.setText("Correct password. Logging into database.");
-            }
-        });
+
 
         VBox signIn = new VBox();
         signIn.setPadding(new Insets(125,0,0,0));
@@ -105,6 +89,7 @@ public class HelloApplication extends Application {
 
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(e->{
+            //connection.close();
             System.exit(0);
         });
         fileMenu.getItems().add(exit);
@@ -114,9 +99,35 @@ public class HelloApplication extends Application {
 
         //create a tabpane
         TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
         tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), itemStats.getInstance());
         pane.setTop(signIn);
-        //pane.setBottom(v);  //location of VBox to be changed.
+
+        //if account already exists
+        if(ls.checkIfExists()){
+            pane.setTop(menu);
+            pane.setCenter(tabPane);
+        }
+
+
+        signInBtn.setOnAction(e->{
+            if(Const.DB_NAME.equals(DBName.getText()) && Const.DB_USER.equals(DBUsername.getText()) && Const.DB_PASSWORD.equals(DBPassword.getText()) && Const.DB_LOGINPASS.equals(DBLoginPassword.getText())){
+                ls.addAccount(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
+            }
+            boolean passwordAccepted = ls.authenticate(DBName.getText(), DBUsername.getText(), DBPassword.getText(), DBLoginPassword.getText());
+            if(!passwordAccepted){
+                loginSpoilerText.setVisible(true);
+                loginSpoilerText.setFill(Paint.valueOf("FF0000"));
+                loginSpoilerText.setText("Incorrect password. Please try again!");
+            }else{
+                //enter system
+                loginSpoilerText.setVisible(true);
+                loginSpoilerText.setFill(Paint.valueOf("00FF00"));
+                loginSpoilerText.setText("Correct password. Logging into database.");
+                pane.setTop(menu);
+                pane.setCenter(tabPane);
+            }
+        });
 
 
 

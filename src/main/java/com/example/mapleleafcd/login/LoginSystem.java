@@ -1,6 +1,8 @@
 package com.example.mapleleafcd.login;
 
 import java.io.*;
+import com.example.mapleleafcd.database.Const;
+
 
 public class LoginSystem {
     File file = new File("accounts");
@@ -30,7 +32,6 @@ public class LoginSystem {
                                 i = credentials.length;
                             }
                         }
-
                     }
                 }
             }
@@ -52,7 +53,31 @@ public class LoginSystem {
                 e.printStackTrace();
             }
         }
-
+    }
+    public boolean checkIfExists(){
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String str;
+            String txt = "";
+            while((str = br.readLine()) != null) {
+                txt = txt + str + "\n";
+            }
+            credentials = txt.split("(dbname = )|(dbuser = )|(dbpassword = )|(dbloginpass = )");
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        if(credentials.length == 5){
+            if (credentials[1].substring(0,credentials[1].length()-1).equals(Const.DB_NAME)) {
+                if(credentials[2].substring(0,credentials[2].length()-1).equals(Const.DB_USER)) {
+                    if (credentials[3].substring(0, credentials[3].length() - 1).equals(Const.DB_PASSWORD)) {
+                        if (credentials[4].substring(0, credentials[4].length() - 1).equals(Const.DB_LOGINPASS)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }
