@@ -19,7 +19,10 @@ public class AlbumsTable implements AlbumsDAO {
     @Override
     public ArrayList<Albums> getAllAlbums(){
         //SELECT * FROM albums;
-        String query = "SELECT * FROM " + DBConst.TABLE_ALBUMS;
+        String query = "SELECT * FROM " + DBConst.TABLE_ALBUMS + "AS a " +
+                "INNER JOIN " + DBConst.TABLE_GENRES + "AS g " + "WHERE a." + DBConst.ALBUMS_COLUMN_GENREID + " = g." + DBConst.GENRES_COLUMN_ID +
+                "INNER JOIN " + DBConst.TABLE_ARTISTS + "AS ar " + "WHERE a." + DBConst.ALBUMS_COLUMN_ARTISTID + " = ar." + DBConst.ARTISTS_COLUMN_ID +
+                "INNER JOIN " + DBConst.TABLE_STUDIOS + "AS s " + "WHERE a." + DBConst.ALBUMS_COLUMN_STUDIOID + " = s." + DBConst.STUDIOS_COLUMN_ID;
 
         albums = new ArrayList<>();
 
@@ -32,7 +35,15 @@ public class AlbumsTable implements AlbumsDAO {
                 albums.add(
                         new Albums(
                                 data.getInt(DBConst.ALBUMS_COLUMN_ID),
-                                data.getString(DBConst.ALBUMS_COLUMN_NAME)));
+                                data.getString(DBConst.ALBUMS_COLUMN_NAME),
+                                data.getInt(DBConst.ALBUMS_COLUMN_NUMSONGS),
+                                data.getString(DBConst.ALBUMS_COLUMN_RELEASEDATE),
+                                data.getDouble(DBConst.ALBUMS_COLUMN_LENGTH),
+                                data.getDouble(DBConst.ALBUMS_COLUMN_PRICE),
+                                data.getDouble(DBConst.ALBUMS_COLUMN_RATING),
+                                data.getString(DBConst.ALBUMS_COLUMN_GENREID),
+                                data.getString(DBConst.ALBUMS_COLUMN_ARTISTID),
+                                data.getString(DBConst.ALBUMS_COLUMN_STUDIOID)));
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -49,7 +60,15 @@ public class AlbumsTable implements AlbumsDAO {
             if(data.next()){
                 Albums album = new Albums(
                         data.getInt(DBConst.ALBUMS_COLUMN_ID),
-                        data.getString(DBConst.ALBUMS_COLUMN_NAME));
+                        data.getString(DBConst.ALBUMS_COLUMN_NAME),
+                        data.getInt(DBConst.ALBUMS_COLUMN_NUMSONGS),
+                        data.getString(DBConst.ALBUMS_COLUMN_RELEASEDATE),
+                        data.getDouble(DBConst.ALBUMS_COLUMN_LENGTH),
+                        data.getDouble(DBConst.ALBUMS_COLUMN_PRICE),
+                        data.getDouble(DBConst.ALBUMS_COLUMN_RATING),
+                        data.getString(DBConst.ALBUMS_COLUMN_GENREID),
+                        data.getString(DBConst.ALBUMS_COLUMN_ARTISTID),
+                        data.getString(DBConst.ALBUMS_COLUMN_STUDIOID));
                 return album;
             }
         }catch (Exception e){
