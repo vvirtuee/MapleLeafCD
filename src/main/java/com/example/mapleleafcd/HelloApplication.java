@@ -5,6 +5,7 @@ import com.example.mapleleafcd.login.LoginSystem;
 import com.example.mapleleafcd.tabs.addItem;
 import com.example.mapleleafcd.tabs.itemStats;
 import com.example.mapleleafcd.tabs.removeItem;
+import com.example.mapleleafcd.tabs.updateItem;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -100,7 +101,7 @@ public class HelloApplication extends Application {
         //create a tabpane
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), itemStats.getInstance());
+        tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), updateItem.getInstance());
         pane.setTop(signIn);
 
         //if account already exists
@@ -132,7 +133,7 @@ public class HelloApplication extends Application {
 
 
         //Database connection
-        //Database connection = Database.getInstance();
+        Database connection = Database.getInstance();
         //connection.close();
 
 

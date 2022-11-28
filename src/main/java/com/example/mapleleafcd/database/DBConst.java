@@ -31,7 +31,7 @@ public class DBConst {
     public static final String TABLE_STUDIOS ="studios";
     public static final String STUDIOS_COLUMN_ID = "id";
     public static final String STUDIOS_COLUMN_STUDIO = "studio";
-    public static final String STUDIOS_COLUMN_DATECREATED = "date_created";
+    public static final String STUDIOS_COLUMN_DATECREATED = "dateCreated";
 
 
     //TABLE CREATE STATEMENTS
