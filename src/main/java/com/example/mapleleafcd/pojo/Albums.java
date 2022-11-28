@@ -5,7 +5,7 @@ public class Albums {
     private String name;
     private int numSongs;
     private String releaseDate;
-    private Double length;
+    private String length;
     private Double price;
     private Double rating;
 
@@ -13,7 +13,7 @@ public class Albums {
     private String artist_id;
     private String studio_id;
 
-    public Albums(int id, String name, int numSongs, String releaseDate, Double length, Double price, Double rating, String genre_id, String artist_id, String studio_id) {
+    public Albums(int id, String name, int numSongs, String releaseDate, String length, Double price, Double rating, String genre_id, String artist_id, String studio_id) {
         this.id = id;
         this.name = name;
         this.numSongs = numSongs;
@@ -39,8 +39,8 @@ public class Albums {
     public String getReleaseDate(){return releaseDate;}
     public void setReleaseDate(String releaseDate){this.releaseDate = releaseDate;}
 
-    public Double getLength(){return length;}
-    public void setLength(Double length){this.length = length;}
+    public String getLength(){return length;}
+    public void setLength(String length){this.length = length;}
 
     public Double getPrice(){return price;}
     public void setPrice(Double price){this.price = price;}
