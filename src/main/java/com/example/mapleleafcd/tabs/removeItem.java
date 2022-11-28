@@ -291,7 +291,7 @@ public class removeItem extends Tab {
         Text genreSpoiler = new Text();
         genreSpoiler.setVisible(false);
         genreSpoiler.setFill(Paint.valueOf("00FF00"));
-        genresRoot.add(genreSpoiler,0,9);
+        genresRoot.add(genreSpoiler,0,2);
 
         genreRemoved.setOnAction(e->{
             String selectedItem = genresCombo.getSelectionModel().getSelectedItem().toString();
@@ -379,7 +379,7 @@ public class removeItem extends Tab {
         Text studioSpoiler = new Text();
         studioSpoiler.setVisible(false);
         studioSpoiler.setFill(Paint.valueOf("00FF00"));
-        studiosRoot.add(studioSpoiler,0,9);
+        studiosRoot.add(studioSpoiler,0,3);
 
         studioRemoved.setOnAction(e->{
             String selectedItem = studiosCombo.getSelectionModel().getSelectedItem().toString();
@@ -412,8 +412,8 @@ public class removeItem extends Tab {
         studiosRoot.add(dateCreated,0,2);
         studiosRoot.add(dateCreatedField,1,2);
 
-        studiosRoot.add(studioRemoved, 0, 5);
-        studiosRoot.add(returnBtn3, 1, 5);
+        studiosRoot.add(studioRemoved, 0, 3);
+        studiosRoot.add(returnBtn3, 1, 3);
 
         studiosCombo.setOnAction(e->{
             int selectedIndex = studiosCombo.getSelectionModel().getSelectedIndex();
