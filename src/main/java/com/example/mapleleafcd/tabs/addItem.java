@@ -3,186 +3,138 @@ package com.example.mapleleafcd.tabs;
 import com.example.mapleleafcd.HelloApplication;
 import com.example.mapleleafcd.database.DBConst;
 import com.example.mapleleafcd.database.Database;
-import com.example.mapleleafcd.pojo.*;
+import com.example.mapleleafcd.pojo.Albums;
+import com.example.mapleleafcd.pojo.Artists;
+import com.example.mapleleafcd.pojo.Genres;
+import com.example.mapleleafcd.pojo.Studios;
+import com.example.mapleleafcd.prompts.Prompt;
 import com.example.mapleleafcd.tables.AlbumsTable;
 import com.example.mapleleafcd.tables.ArtistsTable;
 import com.example.mapleleafcd.tables.GenresTable;
 import com.example.mapleleafcd.tables.StudiosTable;
 import com.example.mapleleafcd.verifications.Verifier;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class updateItem extends Tab {
-    private static updateItem instance;
+public class addItem extends Tab {
+    private static addItem instance;
 
-    TableView<Albums> table1 = new TableView();
-    TableView<Genres> table2 = new TableView();
-    TableView<Artists> table3 = new TableView();
-    TableView<Studios> table4 = new TableView();
+    public TableView tableView;
+
+    Prompt root = new Prompt();
+    GridPane albumsRoot = new GridPane();
+    GridPane genresRoot = new GridPane();
+    GridPane artistsRoot = new GridPane();
+    GridPane studiosRoot = new GridPane();
+
 
     Database db = Database.getInstance();
-    private updateItem(){
-        this.setText("Update Item");
+    private addItem(){
+        this.setText("Add Item");
 
-        GridPane promptRoot = new GridPane();
-        GridPane albumsRoot = new GridPane();
+        //initialize prompt control
+        root.initializePrompt(this, albumsRoot, genresRoot, artistsRoot, studiosRoot);
+
+        /** ALBUMS ROOT **/
         albumsRoot.setPadding(new Insets(10,10,10,10));
+        albumsRoot.setVgap(10);
+        albumsRoot.setHgap(10);
 
-
-        GridPane genresRoot = new GridPane();
-        GridPane artistsRoot = new GridPane();
-        GridPane studiosRoot = new GridPane();
-
-        genresRoot.setPadding(new Insets(10,10,10,10));
-        artistsRoot.setPadding(new Insets(10,10,10,10));
-        studiosRoot.setPadding(new Insets(10,10,10,10));
-
-
-        GenresTable genres = new GenresTable();
-        ArtistsTable artists = new ArtistsTable();
-        StudiosTable studios = new StudiosTable();
-
-        /** PROMPT ROOT **/
-        promptRoot.setPadding(new Insets(10,10,10,10));
-        promptRoot.setVgap(10);
-        promptRoot.setHgap(10);
-        Text prompt = new Text("Please select a table to add an item to:");
-        Button albumsBtn = new Button("Albums");
-        Button genresBtn = new Button("Genres");
-        Button artistsBtn = new Button("Artists");
-        Button studiosBtn = new Button("Studios");
-        promptRoot.add(prompt,0,0);
-
-        albumsBtn.setOnAction(e->{
-            this.setContent(albumsRoot);
-        });
-        genresBtn.setOnAction(e->{
-            this.setContent(genresRoot);
-        });
-        artistsBtn.setOnAction(e->{
-            this.setContent(artistsRoot);
-        });
-        studiosBtn.setOnAction(e->{
-            this.setContent(studiosRoot);
-        });
-
-        HBox promptVBox = new HBox();
-        promptVBox.setSpacing(10);
-        promptVBox.getChildren().addAll(albumsBtn,genresBtn,artistsBtn,studiosBtn);
-        promptRoot.add(promptVBox,0,1);
-
-        /** Generation of Table 'Albums' **/
-
-
-        table1.setEditable(true);
-        TableColumn<Albums, String> name = new TableColumn<>("Name");
-        name.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getName()));
-        TableColumn<Albums, String> numSongs = new TableColumn("# Songs");
-        numSongs.setCellValueFactory(e->new SimpleStringProperty(String.valueOf(e.getValue().getNumSongs())));
-        TableColumn<Albums, String> releaseDate = new TableColumn("Release Date");
-        releaseDate.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getReleaseDate()));
-        TableColumn<Albums, String> length = new TableColumn("Length");
-        length.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getLength()));
-        TableColumn<Albums, String> price = new TableColumn("Price");
-        price.setCellValueFactory(e->new SimpleStringProperty(String.valueOf(e.getValue().getPrice())));
-        TableColumn<Albums, String> rating = new TableColumn("Rating");
-        rating.setCellValueFactory(e->new SimpleStringProperty(String.valueOf(e.getValue().getRating())));
-        TableColumn<Albums, String> genre = new TableColumn("Genre");
-        genre.setCellValueFactory(e->new SimpleStringProperty(genres.getGenre(Integer.parseInt(e.getValue().getGenreID())).getGenre()));
-        TableColumn<Albums, String> artist = new TableColumn("Artist");
-        artist.setCellValueFactory(e->new SimpleStringProperty(artists.getArtist(Integer.parseInt(e.getValue().getArtistID())).getArtist()));
-        TableColumn<Albums, String> studio = new TableColumn("Studio");
-        studio.setCellValueFactory(e->new SimpleStringProperty(studios.getStudio(Integer.parseInt(e.getValue().getStudioID())).getStudio()));
-        ObservableList<Albums> albums = FXCollections.observableArrayList();
+        //2. initialize AlbumsTable
         AlbumsTable albumsTable = new AlbumsTable();
-        for(Albums a: albumsTable.getAllAlbums()){
-            albums.add(a);
-            System.out.println("name: " + a.getName());
-        }
 
-        table1.getColumns().addAll(name,numSongs,releaseDate,length,price,rating,genre,artist,studio);
+        Button submit = new Button("Add Album");
 
-        table1.setItems(albums);
 
-        /** Container popup (Albums) **/
+        //3. initialize verifier
+        Verifier v = new Verifier();
 
-        GridPane containerForItemData = new GridPane();
-        containerForItemData.setPadding(new Insets(10,10,10,10));
-        containerForItemData.setVgap(10);
-        containerForItemData.setHgap(10);
-        containerForItemData.setVisible(true);
 
-        /** Albums Data **/
+        //ComboBox: lists out items and allows for selection of items
+        ComboBox<Albums> comboName = new ComboBox<>();
+
+        //sets items from arrayList to ComboBox
+        comboName.setItems(FXCollections.observableArrayList(albumsTable.getAllAlbums()));
         //3. initialize column name
         Text nameText = new Text("Name: ");
         TextField albumName = new TextField();
+        Text textSpoiler = new Text("");
+        textSpoiler.setVisible(false);
+        textSpoiler.setFill(Paint.valueOf("FF0000"));
 
-        Text pseudo = new Text();
+        v.nameVerify(albumName,textSpoiler,submit);
 
-        Verifier v = new Verifier();
-
-        Button submit = new Button("Update Album");
-        submit.setDisable(true);
-
-
-
-        containerForItemData.add(nameText, 0, 0);
-        containerForItemData.add(albumName, 1, 0);
+        albumsRoot.add(nameText, 0, 0);
+        albumsRoot.add(albumName, 1, 0);
+        albumsRoot.add(textSpoiler,2,0);
 
         /** Num Songs **/
         Text numSongsText = new Text("# Songs: ");
-        TextField numSongs0 = new TextField();
+        TextField numSongs = new TextField();
+        Text numSongsSpoiler = new Text("");
+        numSongsSpoiler.setVisible(false);
+        numSongsSpoiler.setFill(Paint.valueOf("FF0000"));
 
+        v.numSongsVerify(numSongs,numSongsSpoiler, submit);
 
-        containerForItemData.add(numSongsText,0,1);
-        containerForItemData.add(numSongs0, 1, 1);
+        albumsRoot.add(numSongsText,0,1);
+        albumsRoot.add(numSongs, 1, 1);
+        albumsRoot.add(numSongsSpoiler,2,1);
 
         /** Release Date **/
         Text releaseDateText = new Text("Release Date (yyyy-mm-dd): ");
-        TextField releaseDate0 = new TextField();
+        TextField releaseDate = new TextField();
+        Text dateCreatedSpoilerText = new Text();
+        dateCreatedSpoilerText.setVisible(false);
+        dateCreatedSpoilerText.setFill(Paint.valueOf("FF0000"));
 
+        v.dateVerify(releaseDate,dateCreatedSpoilerText, submit);
 
-        containerForItemData.add(releaseDateText,0,2);
-        containerForItemData.add(releaseDate0, 1, 2);
+        albumsRoot.add(releaseDateText,0,2);
+        albumsRoot.add(releaseDate, 1, 2);
+        albumsRoot.add(dateCreatedSpoilerText,2,2);
 
         /** Length **/
 
         Text lengthText = new Text("Length (hh:mm:ss): ");
-        TextField length0 = new TextField();
+        TextField length = new TextField();
+        Text lengthSpoilerText = new Text();
+        lengthSpoilerText.setVisible(false);
+        lengthSpoilerText.setFill(Paint.valueOf("FF0000"));
 
+        v.lengthVerify(length, lengthSpoilerText, submit);
 
-        containerForItemData.add(lengthText,0,3);
-        containerForItemData.add(length0, 1, 3);
+        albumsRoot.add(lengthText,0,3);
+        albumsRoot.add(length, 1, 3);
+        albumsRoot.add(lengthSpoilerText,2,3);
 
 
         /** Price **/
 
         Text priceText = new Text("Price: ");
-        TextField price0 = new TextField();
-        containerForItemData.add(priceText,0,4);
-        containerForItemData.add(price0, 1, 4);
+        TextField price = new TextField();
+        Text priceSpoilerText = new Text("");
+        priceSpoilerText.setVisible(false);
+        priceSpoilerText.setFill(Paint.valueOf("FF0000"));
+        albumsRoot.add(priceText,0,4);
+        albumsRoot.add(price, 1, 4);
+        albumsRoot.add(priceSpoilerText,2,4);
 
+        v.priceVerify(price,priceSpoilerText, submit);
 
         /** Rating **/
 
@@ -234,7 +186,8 @@ public class updateItem extends Tab {
 
         ratingContainerINFRONT.setClip(new Rectangle(0, 0, 65, 25));
 
-        AtomicReference<Double> rating0 = new AtomicReference<>((double) 2.5);
+
+        AtomicReference<Double> rating = new AtomicReference<>((double) 2.5);
         ratingContainerBEHIND.setOnMouseClicked(e->{
             int id = 0;
             try{
@@ -243,438 +196,361 @@ public class updateItem extends Tab {
             } catch(StringIndexOutOfBoundsException e1){
                 System.out.println("Failed to access element");
             }
-            System.out.println("id: " + id);
             if(id < 5) {
-                System.out.println(starContainer[0].getFitWidth());
-
                 double clippedValue = (2.5) * (Math.round(Math.abs(e.getX() / 2.5)));
                 ratingContainerINFRONT.setClip(new Rectangle(0, 0, clippedValue, 25));
-                rating0.set(clippedValue / (starContainer[0].getFitWidth()));
+                rating.set(5*(clippedValue / (starContainer[0].getFitWidth() * 5)));
+            }
+            DecimalFormat df = new DecimalFormat("0.0");
+            rating.set(Double.parseDouble(df.format(rating.getPlain())));
+            if(rating.getPlain() > 5){
+                rating.set(5.0);
             }
         });
 
-        containerForItemData.add(ratingText,0,5);
-        containerForItemData.add(ratingContainerBEHIND, 1, 5);
-        containerForItemData.add(ratingContainerINFRONT,1,5);
+        albumsRoot.add(ratingText,0,5);
+        albumsRoot.add(ratingContainerBEHIND, 1, 5);
+        albumsRoot.add(ratingContainerINFRONT,1,5);
 
 
         /** Genre **/
 
         Text genreText = new Text("Genre: ");
-        ComboBox genre0 = new ComboBox<>();
+        ComboBox genre = new ComboBox<>();
         ArrayList<String> listOfGenres = new ArrayList<>();
         GenresTable genresTable = new GenresTable();
-        for(Genres name0 : genresTable.getAllGenres()){
-            listOfGenres.add(name0.getGenre());
+        for(Genres name : genresTable.getAllGenres()){
+            listOfGenres.add(name.getGenre());
         }
 
-        genre0.setItems(FXCollections.observableArrayList(listOfGenres));
-        genre0.getSelectionModel().selectFirst();
-        containerForItemData.add(genreText,0,6);
-        containerForItemData.add(genre0,1,6);
+        genre.setItems(FXCollections.observableArrayList(listOfGenres));
+        genre.getSelectionModel().selectFirst();
+        albumsRoot.add(genreText,0,6);
+        albumsRoot.add(genre,1,6);
 
         /** Artist **/
 
         Text artistText = new Text("Artist: ");
-        ComboBox artist0 = new ComboBox<>();
+        ComboBox artist = new ComboBox<>();
         ArrayList<String> listOfArtists = new ArrayList<>();
         ArtistsTable artistsTable = new ArtistsTable();
-        for(Artists name0 : artistsTable.getAllArtists()){
-            listOfArtists.add(name0.getArtist());
+        for(Artists name : artistsTable.getAllArtists()){
+            listOfArtists.add(name.getArtist());
         }
 
-        artist0.setItems(FXCollections.observableArrayList(listOfArtists));
-        artist0.getSelectionModel().selectFirst();
-        containerForItemData.add(artistText,0,7);
-        containerForItemData.add(artist0,1,7);
+        artist.setItems(FXCollections.observableArrayList(listOfArtists));
+        artist.getSelectionModel().selectFirst();
+        albumsRoot.add(artistText,0,7);
+        albumsRoot.add(artist,1,7);
 
         /** Studio **/
 
         Text studioText = new Text("Studio: ");
-        ComboBox studio0 = new ComboBox<>();
+        ComboBox studio = new ComboBox<>();
         ArrayList<String> listOfStudios = new ArrayList<>();
         StudiosTable studiosTable = new StudiosTable();
-        for(Studios name0 : studiosTable.getAllStudios()){
-            listOfStudios.add(name0.getStudio());
+        for(Studios name : studiosTable.getAllStudios()){
+            listOfStudios.add(name.getStudio());
         }
 
-        studio0.setItems(FXCollections.observableArrayList(listOfStudios));
-        studio0.getSelectionModel().selectFirst();
-        containerForItemData.add(studioText,0,8);
-        containerForItemData.add(studio0,1,8);
+        studio.setItems(FXCollections.observableArrayList(listOfStudios));
+        studio.getSelectionModel().selectFirst();
+        albumsRoot.add(studioText,0,8);
+        albumsRoot.add(studio,1,8);
 
-        containerForItemData.add(submit,0,11);
+        Text updatedSpoilerText = new Text("");
+        updatedSpoilerText.setVisible(false);
+        updatedSpoilerText.setFill(Paint.valueOf("00FF00"));
+        albumsRoot.add(updatedSpoilerText,0,10);
 
-        v.nameVerify(albumName,pseudo,submit);
-        v.numSongsVerify(numSongs0,pseudo, submit);
-        v.dateVerify(releaseDate0,pseudo, submit);
-        v.lengthVerify(length0, pseudo, submit);
-        v.priceVerify(price0,pseudo, submit);
-
-        table1.setOnMouseClicked(e->{
-
-            System.out.println("table was clicked");
-
-            if(!albumsRoot.getChildren().contains(containerForItemData)){
-                albumsRoot.add(containerForItemData,1,0);
-            }
-
-            Albums a = table1.getSelectionModel().getSelectedItem();
-            containerForItemData.setVisible(true);
-            albumName.setText(a.getName());
-            numSongs0.setText(String.valueOf(a.getNumSongs()));
-            releaseDate0.setText(a.getReleaseDate());
-            length0.setText(a.getLength());
-            price0.setText(String.valueOf(a.getPrice()));
-            rating0.set(a.getRating());
-            System.out.println("rating: " + rating0.getPlain());
-            //reset clip position
-            ratingContainerINFRONT.setClip(new Rectangle(0, 0, rating0.getPlain() * 26, 25));
-            //genre0.setIte;
-
-            genre0.getSelectionModel().select(genresTable.getGenre(Integer.parseInt(a.getGenreID())).getGenre());
-            artist0.getSelectionModel().select(artistsTable.getArtist(Integer.parseInt(a.getArtistID())).getArtist());
-            studio0.getSelectionModel().select(studiosTable.getStudio(Integer.parseInt(a.getStudioID())).getStudio());
-
-            v.autoVerify();
-            v.verify(submit);
-
-        });
+        submit.setDisable(true);
 
         submit.setOnAction(e->{
-            albumsRoot.getChildren().remove(containerForItemData);
-
-            Albums a = table1.getSelectionModel().getSelectedItem();
             int genreID = 0;
             int artistID = 0;
             int studioID = 0;
             for(Genres g : genresTable.getAllGenres()){
-                if(g.getGenre().equals(genre0.getValue())){
+                if(g.getGenre().equals(genre.getValue())){
                     genreID = g.getId();
                 }
             }
-            for(Artists a0 : artistsTable.getAllArtists()){
-                if(a0.getArtist().equals(artist0.getValue())){
-                    artistID = a0.getId();
+            for(Artists a : artistsTable.getAllArtists()){
+                if(a.getArtist().equals(artist.getValue())){
+                    artistID = a.getId();
                 }
             }
             for(Studios s : studiosTable.getAllStudios()){
-                if(s.getStudio().equals(studio0.getValue())){
+                if(s.getStudio().equals(studio.getValue())){
                     studioID = s.getId();
                 }
             }
-
-            String query = "UPDATE " + DBConst.TABLE_ALBUMS + " SET " +
-                    DBConst.ALBUMS_COLUMN_NAME + " = " + "\'" + albumName.getText() + "\'" + ", " +
-                    DBConst.ALBUMS_COLUMN_NUMSONGS + " = " + numSongs0.getText() + ", " +
-                    DBConst.ALBUMS_COLUMN_RELEASEDATE + " = " + "\'" + releaseDate0.getText() + "\'" + ", " +
-                    DBConst.ALBUMS_COLUMN_LENGTH + " = " + "\'" + length0.getText() + "\'" + ", " +
-                    DBConst.ALBUMS_COLUMN_PRICE + " = " + price0.getText() + ", " +
-                    DBConst.ALBUMS_COLUMN_RATING + " = " + rating0.getPlain() + ", " +
-                    DBConst.ALBUMS_COLUMN_GENREID + " = " + genreID + ", " +
-                    DBConst.ALBUMS_COLUMN_ARTISTID + " = " + artistID + ", " +
-                    DBConst.ALBUMS_COLUMN_STUDIOID + " = " + studioID + " WHERE " +
-                    DBConst.ALBUMS_COLUMN_ID + " = " + a.getId() + ";";
-            System.out.println("query: " + query);
+            String query = "INSERT INTO " + DBConst.TABLE_ALBUMS + "(" +
+                    DBConst.ALBUMS_COLUMN_ID + ", " +
+                    DBConst.ALBUMS_COLUMN_NAME + ", " +
+                    DBConst.ALBUMS_COLUMN_NUMSONGS + ", " +
+                    DBConst.ALBUMS_COLUMN_RELEASEDATE + ", " +
+                    DBConst.ALBUMS_COLUMN_LENGTH + ", " +
+                    DBConst.ALBUMS_COLUMN_PRICE + ", " +
+                    DBConst.ALBUMS_COLUMN_RATING + ", " +
+                    DBConst.ALBUMS_COLUMN_GENREID + ", " +
+                    DBConst.ALBUMS_COLUMN_ARTISTID + ", " +
+                    DBConst.ALBUMS_COLUMN_STUDIOID + ") VALUES (" +
+                    "NULL, " +
+                    "\'" + albumName.getText() + "\'" + ", " +
+                    numSongs.getText() + ", " +
+                    "\'" + releaseDate.getText() + "\'" + ", " +
+                    "\'" + length.getText() + "\'" + ", " +
+                    price.getText() + ", " +
+                    rating.getPlain() + ", " +
+                    genreID + ", " +
+                    artistID + ", " +
+                    studioID + ");";
 
 
             try{
-                Statement updateItem = db.getConnection().createStatement();
-                updateItem.executeUpdate(query);
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                updatedSpoilerText.setVisible(true);
+                updatedSpoilerText.setText("Added " + albumName.getText() + " to " + DBConst.TABLE_ALBUMS);
+
                 //reset all values if successful query
+                albumName.setText("");
+                numSongs.setText("");
+                releaseDate.setText("");
+                length.setText("");
+                price.setText("");
+                rating.set(2.5);
+
+                //reset clip position
+                ratingContainerINFRONT.setClip(new Rectangle(0, 0, 65, 25));
+
                 //re-update button
                 v.verify(submit);
 
+
             }catch(Exception e1){
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
 
-            refreshTable();
-
         });
 
-        /** Genres TableView generation **/
-        table2.setEditable(true);
-        TableColumn<Genres, String> name0 = new TableColumn<>("Name");
-        name0.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getGenre()));
-        ObservableList<Genres> genresOL = FXCollections.observableArrayList();
-        for(Genres g: genresTable.getAllGenres()){
-            genresOL.add(g);
-        }
+        albumsRoot.add(submit, 0,9);
 
-        table2.getColumns().addAll(name0);
+        /** GENRES ROOT **/
+        genresRoot.setPadding(new Insets(10,10,10,10));
+        genresRoot.setHgap(10);
+        genresRoot.setVgap(10);
 
-        table2.setItems(genresOL);
-
-        /** Container popup (Genres) **/
-
-        GridPane containerForGenres = new GridPane();
-        containerForGenres.setPadding(new Insets(10,10,10,10));
-        containerForGenres.setVgap(10);
-        containerForGenres.setHgap(10);
-        containerForGenres.setVisible(true);
-
-        /** Genres Data **/
-        //3. initialize column name
-        Text genreText0 = new Text("Genre: ");
+        /** Genre Name **/
+        Text genreText1 = new Text("Genres: ");
         TextField genreField = new TextField();
 
+        Text genreSpoiler = new Text("");
+        genreSpoiler.setVisible(false);
+        genreSpoiler.setFill(Paint.valueOf("FF0000"));
+        genresRoot.add(genreText1,0,0);
+        genresRoot.add(genreField,1,0);
+        genresRoot.add(genreSpoiler,2,0);
+        Button submit1 = new Button("Add Genre");
+        genresRoot.add(submit1,0,1);
 
-        Button submit2 = new Button("Update Genre");
-        submit2.setDisable(true);
+        /** Genre Button **/
+        v.nameVerify(genreField,genreSpoiler,submit1);
 
-        v.nameVerify(genreField,pseudo,submit2);
+        Text genreUpdated = new Text("");
+        genreUpdated.setVisible(false);
+        genreUpdated.setFill(Paint.valueOf("00FF00"));
+        genresRoot.add(genreUpdated,0,2);
+        submit1.setOnAction(e->{
+            String query = "INSERT INTO " + DBConst.TABLE_GENRES + "(" +
+                    DBConst.GENRES_COLUMN_ID + ", " +
+                    DBConst.GENRES_COLUMN_GENRE + ") VALUES (" +
+                    "NULL, " +
+                    "\'" + genreField.getText() + "\'" + ");";
+            try{
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                genreUpdated.setVisible(true);
+                genreUpdated.setText("Added " + genreField.getText() + " to " + DBConst.TABLE_GENRES);
 
-        containerForGenres.add(genreText0, 0, 0);
-        containerForGenres.add(genreField, 1, 0);
-        containerForGenres.add(submit2,0,1);
+                //reset all values if successful query
+                genreField.setText("");
 
-        table2.setOnMouseClicked(e->{
-            if(!genresRoot.getChildren().contains(containerForGenres)){
-                genresRoot.add(containerForGenres,1,0);
+                //re-update button
+                v.verify(submit1);
+
+
+            }catch(Exception e1){
+                e1.printStackTrace();
+                System.out.println("Failed to establish connection.");
             }
-
-            Genres g = table2.getSelectionModel().getSelectedItem();
-            containerForItemData.setVisible(true);
-            genreField.setText(g.getGenre());
-
-            v.autoVerify();
-            v.verify(submit);
-
-            submit2.setDisable(false);
         });
+
+        /** ARTIST ROOT **/
+        artistsRoot.setPadding(new Insets(10,10,10,10));
+        artistsRoot.setHgap(10);
+        artistsRoot.setVgap(10);
+
+        /** Artist Name **/
+
+        Text artistText1 = new Text("Artist: ");
+        TextField artistField = new TextField();
+        Text artistFieldSpoiler = new Text("");
+        artistFieldSpoiler.setVisible(false);
+        artistFieldSpoiler.setFill(Paint.valueOf("FF0000"));
+        artistsRoot.add(artistText1,0,0);
+        artistsRoot.add(artistField,1,0);
+        artistsRoot.add(artistFieldSpoiler,2,0);
+
+        /** Artist Birthday **/
+        Text birthday = new Text("Birthday (yyyy-mm-dd): ");
+        TextField birthdayField = new TextField();
+        Text birthdaySpoiler = new Text("");
+        birthdaySpoiler.setVisible(false);
+        birthdaySpoiler.setFill(Paint.valueOf("FF0000"));
+        artistsRoot.add(birthday,0,1);
+        artistsRoot.add(birthdayField,1,1);
+        artistsRoot.add(birthdaySpoiler,2,1);
+
+        Button submit2 = new Button("Add Artist");
+        artistsRoot.add(submit2,0,2);
+
+        Text artistSpoiler = new Text("");
+        artistSpoiler.setVisible(false);
+        artistSpoiler.setFill(Paint.valueOf("00FF00"));
+        artistsRoot.add(artistSpoiler,0,3);
+
+        /** Artist Button **/
+        v.nameVerify(artistField, artistFieldSpoiler,submit2);
+        v.dateVerify(birthdayField,birthdaySpoiler, submit2);
 
         submit2.setOnAction(e->{
-            genresRoot.getChildren().remove(containerForGenres);
-
-            Genres g = table2.getSelectionModel().getSelectedItem();
-
-            String query = "UPDATE " + DBConst.TABLE_GENRES + " SET " +
-                    DBConst.GENRES_COLUMN_GENRE + " = " + "\'" + genreField.getText()+ "\'" +  " WHERE " +
-                    DBConst.GENRES_COLUMN_ID + " = " + g.getId() + ";";
+            String query = "INSERT INTO " + DBConst.TABLE_ARTISTS + "(" +
+                    DBConst.ARTISTS_COLUMN_ID + ", " +
+                    DBConst.ARTISTS_COLUMN_ARTIST + ", " +
+                    DBConst.ARTISTS_COLUMN_BIRTHDAY + ") VALUES (" +
+                    "NULL, " +
+                    "\'" + artistField.getText() + "\'" + ", " +
+                    "\'" + birthdayField.getText() + "\'" + ");";
             try{
-                Statement updateItem = db.getConnection().createStatement();
-                updateItem.executeUpdate(query);
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                artistSpoiler.setVisible(true);
+                artistSpoiler.setText("Added " + artistField.getText() + " to " + DBConst.TABLE_ARTISTS);
 
+                //reset all values if successful query
+                artistField.setText("");
+                birthdayField.setText("");
 
+                //re-update button
                 v.verify(submit2);
 
+
             }catch(Exception e1){
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
-
-            refreshTable();
-
         });
 
-        /** Genres TableView generation **/
-        table3.setEditable(true);
-        TableColumn<Artists, String> name1 = new TableColumn<>("Name");
-        name1.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getArtist()));
-        TableColumn<Artists, String> birthday = new TableColumn<>("Birthday");
-        birthday.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getBirthday()));
-        ObservableList<Artists> artistsOL = FXCollections.observableArrayList();
-        for(Artists ar: artistsTable.getAllArtists()){
-            artistsOL.add(ar);
-        }
+        /** STUDIOS ROOT **/
+        studiosRoot.setPadding(new Insets(10,10,10,10));
+        studiosRoot.setHgap(10);
+        studiosRoot.setVgap(10);
 
-        table3.getColumns().addAll(name1, birthday);
+        /** Studio Name **/
 
-        table3.setItems(artistsOL);
+        Text studioText1 = new Text("Studio: ");
+        TextField studioField = new TextField();
+        Text studioFieldSpoiler = new Text("");
+        studioFieldSpoiler.setVisible(false);
+        studioFieldSpoiler.setFill(Paint.valueOf("FF0000"));
+        studiosRoot.add(studioText1,0,0);
+        studiosRoot.add(studioField,1,0);
+        studiosRoot.add(studioFieldSpoiler,2,0);
 
-        /** Container popup (Genres) **/
+        /** Studio Date Established **/
+        Text dateEstablishedText = new Text("Date Created (yyyy-mm-dd): ");
+        TextField dateEstablishedField = new TextField();
+        Text dateEstablishedSpoiler = new Text("");
+        dateEstablishedSpoiler.setVisible(false);
+        dateEstablishedSpoiler.setFill(Paint.valueOf("FF0000"));
+        studiosRoot.add(dateEstablishedText,0,1);
+        studiosRoot.add(dateEstablishedField,1,1);
+        studiosRoot.add(dateEstablishedSpoiler,2,1);
 
-        GridPane containerForArtists = new GridPane();
-        containerForArtists.setPadding(new Insets(10,10,10,10));
-        containerForArtists.setVgap(10);
-        containerForArtists.setHgap(10);
-        containerForArtists.setVisible(true);
+        Button submit3 = new Button("Add Studio");
+        studiosRoot.add(submit3,0,2);
 
-        /** Artists Data **/
-        Button submit3 = new Button("Update Artist");
-        submit3.setDisable(true);
+        Text studioSpoiler = new Text("");
+        studioSpoiler.setVisible(false);
+        studioSpoiler.setFill(Paint.valueOf("00FF00"));
+        studiosRoot.add(studioSpoiler,0,3);
 
-        //3. initialize column name
-        Text artistText0 = new Text("Artist: ");
-        TextField artistField = new TextField();
-        v.nameVerify(artistField,pseudo,submit3);
+        /** Studio Button **/
+        v.nameVerify(studioField, studioFieldSpoiler,submit2);
+        v.dateVerify(dateEstablishedField,dateEstablishedSpoiler, submit2);
 
-        Text birthdayText = new Text("Birthday (yyyy/mm/dd): ");
-        TextField birthdayField = new TextField();
-        v.dateVerify(birthdayField,pseudo,submit3);
-
-        containerForArtists.add(artistText0, 0, 0);
-        containerForArtists.add(artistField, 1, 0);
-
-        containerForArtists.add(birthdayText, 0, 1);
-        containerForArtists.add(birthdayField, 1, 1);
-
-        containerForArtists.add(submit3,0,2);
-
-        table3.setOnMouseClicked(e->{
-            if(!artistsRoot.getChildren().contains(containerForArtists)){
-                artistsRoot.add(containerForArtists,1,0);
-            }
-
-            Artists ar = table3.getSelectionModel().getSelectedItem();
-            containerForArtists.setVisible(true);
-            artistField.setText(ar.getArtist());
-            birthdayField.setText(ar.getBirthday());
-
-            v.autoVerify();
-            v.verify(submit3);
-
-            submit3.setDisable(false);
-        });
 
         submit3.setOnAction(e->{
-            artistsRoot.getChildren().remove(containerForArtists);
-
-            Artists ar = table3.getSelectionModel().getSelectedItem();
-
-            String query = "UPDATE " + DBConst.TABLE_ARTISTS + " SET " +
-                    DBConst.ARTISTS_COLUMN_ARTIST + " = " + "\'" + artistField.getText()+ "\'" + ", " +
-                    DBConst.ARTISTS_COLUMN_BIRTHDAY + " = " + "\'" + birthdayField.getText()+ "\'" +  " WHERE " +
-                    DBConst.ARTISTS_COLUMN_ID + " = " + ar.getId() + ";";
+            String query = "INSERT INTO " + DBConst.TABLE_STUDIOS + "(" +
+                    DBConst.STUDIOS_COLUMN_ID + ", " +
+                    DBConst.STUDIOS_COLUMN_STUDIO + ", " +
+                    DBConst.STUDIOS_COLUMN_DATECREATED + ") VALUES (" +
+                    "NULL, " +
+                    "\'" + studioField.getText() + "\'" + ", " +
+                    "\'" + dateEstablishedField.getText() + "\'" + ");";
             try{
-                Statement updateItem = db.getConnection().createStatement();
-                updateItem.executeUpdate(query);
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                studioSpoiler.setVisible(true);
+                studioSpoiler.setText("Added " + studioField.getText() + " to " + DBConst.TABLE_STUDIOS);
 
+                //reset all values if successful query
+                studioField.setText("");
+                dateEstablishedField.setText("");
 
+                //re-update button
                 v.verify(submit3);
 
-            }catch(Exception e1){
-                e1.printStackTrace();
-                System.out.println("Failed to establish connection.");
-            }
-
-            refreshTable();
-
-        });
-
-        /** Studios TableView generation **/
-        table4.setEditable(true);
-        TableColumn<Studios, String> name2 = new TableColumn<>("Studio Name");
-        name2.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getStudio()));
-        TableColumn<Studios, String> dateCreated = new TableColumn<>("Date Created");
-        dateCreated.setCellValueFactory(e->new SimpleStringProperty(e.getValue().getDateCreated()));
-        ObservableList<Studios> studiosOL = FXCollections.observableArrayList();
-        for(Studios s: studiosTable.getAllStudios()){
-            studiosOL.add(s);
-        }
-
-        table4.getColumns().addAll(name2, dateCreated);
-
-        table4.setItems(studiosOL);
-
-        /** Container popup (Studios) **/
-
-        GridPane containerForStudios = new GridPane();
-        containerForStudios.setPadding(new Insets(10,10,10,10));
-        containerForStudios.setVgap(10);
-        containerForStudios.setHgap(10);
-        containerForStudios.setVisible(true);
-
-        /** Studios Data **/
-        Button submit4 = new Button("Update Studio");
-        submit4.setDisable(true);
-
-        //3. initialize column name
-        Text studioText0 = new Text("Studio: ");
-        TextField studioField = new TextField();
-        v.nameVerify(studioField,pseudo,submit4);
-
-        Text dateCreatedText = new Text("Date Created: (yyyy/mm/dd): ");
-        TextField dateCreatedField = new TextField();
-        v.dateVerify(dateCreatedField,pseudo,submit4);
-
-        containerForStudios.add(studioText0, 0, 0);
-        containerForStudios.add(studioField, 1, 0);
-
-        containerForStudios.add(dateCreatedText, 0, 1);
-        containerForStudios.add(dateCreatedField, 1, 1);
-
-        containerForStudios.add(submit4,0,2);
-
-        table4.setOnMouseClicked(e->{
-            if(!studiosRoot.getChildren().contains(containerForStudios)){
-                studiosRoot.add(containerForStudios,1,0);
-            }
-
-            Studios s = table4.getSelectionModel().getSelectedItem();
-            containerForStudios.setVisible(true);
-            studioField.setText(s.getStudio());
-            dateCreatedField.setText(s.getDateCreated());
-
-            v.autoVerify();
-            v.verify(submit4);
-
-            submit3.setDisable(false);
-        });
-
-        submit4.setOnAction(e->{
-            studiosRoot.getChildren().remove(containerForStudios);
-
-            Studios s = table4.getSelectionModel().getSelectedItem();
-
-            String query = "UPDATE " + DBConst.TABLE_STUDIOS + " SET " +
-                    DBConst.STUDIOS_COLUMN_STUDIO + " = " + "\'" + studioField.getText()+ "\'" + ", " +
-                    DBConst.STUDIOS_COLUMN_DATECREATED + " = " + "\'" + dateCreatedField.getText()+ "\'" +  " WHERE " +
-                    DBConst.STUDIOS_COLUMN_ID + " = " + s.getId() + ";";
-            try{
-                Statement updateItem = db.getConnection().createStatement();
-                updateItem.executeUpdate(query);
-
-
-                v.verify(submit4);
 
             }catch(Exception e1){
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
-
-            refreshTable();
-
         });
-
 
         //each time tab is switched
         this.setOnSelectionChanged(e->{
-            refreshTable();
-            this.setContent(promptRoot);
+
+            //remove all spoilers for albums
+
+            /** Albums Spoilers **/
+            textSpoiler.setVisible(false);
+            numSongsSpoiler.setVisible(false);
+            dateCreatedSpoilerText.setVisible(false);
+            priceSpoilerText.setVisible(false);
+            lengthSpoilerText.setVisible(false);
+            updatedSpoilerText.setVisible(false);
+            artistSpoiler.setVisible(false);
+            studioSpoiler.setVisible(false);
+            dateEstablishedSpoiler.setVisible(false);
+
+            /** Genres Spoilers **/
+            genreSpoiler.setVisible(false);
+
+            this.setContent(root.initializePrompt(this,albumsRoot,genresRoot,artistsRoot,studiosRoot));
+
         });
 
-        //adding all tables
-        albumsRoot.add(table1,0,0);
-        genresRoot.add(table2,0,0);
-        artistsRoot.add(table3,0,0);
-        studiosRoot.add(table4,0,0);
-        //root.add(containerForItemData,1,0);
-        this.setContent(promptRoot);
-    }
-    public void refreshTable(){
-        AlbumsTable albumsTableRefresh = AlbumsTable.getInstance();
-        table1.getItems().clear();
-        table1.getItems().addAll(albumsTableRefresh.getAllAlbums());
+        this.setContent(root.initializePrompt(this,albumsRoot,genresRoot,artistsRoot,studiosRoot));
 
-        GenresTable genresTableRefresh = GenresTable.getInstance();
-        table2.getItems().clear();
-        table2.getItems().addAll(genresTableRefresh.getAllGenres());
 
-        ArtistsTable artistsTableRefresh = ArtistsTable.getInstance();
-        table3.getItems().clear();
-        table3.getItems().addAll(artistsTableRefresh.getAllArtists());
-
-        StudiosTable studiosTableRefresh = StudiosTable.getInstance();
-        table4.getItems().clear();
-        table4.getItems().addAll(studiosTableRefresh.getAllStudios());
     }
 
-    public static updateItem getInstance(){
+    public static addItem getInstance(){
         if(instance == null){
-            instance = new updateItem();
+            instance = new addItem();
         }
         return instance;
     }
