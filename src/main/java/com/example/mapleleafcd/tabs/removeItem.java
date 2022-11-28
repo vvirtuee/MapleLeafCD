@@ -48,6 +48,12 @@ public class removeItem extends Tab {
 
         Button returnBtn = new Button("Return");
 
+        Button returnBtn1 = new Button("Return");
+
+        Button returnBtn2 = new Button("Return");
+
+        Button returnBtn3 = new Button("Return");
+
         promptRoot.add(prompt,0,0);
 
 
@@ -141,6 +147,18 @@ public class removeItem extends Tab {
             this.setContent(promptRoot);
         });
 
+        returnBtn1.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
+        returnBtn2.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
+        returnBtn3.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
         /** ALBUMS ROOT**/
         albumsRoot.setPadding(new Insets(10,10,10,10));
         albumsRoot.setHgap(10);
@@ -165,16 +183,43 @@ public class removeItem extends Tab {
         Text studioAlbum = new Text();
 
 
-        comboName.setOnAction(e->{
+        comboName.setOnAction(e-> {
             int selectedIndex = comboName.getSelectionModel().getSelectedIndex();
-            songsNum.setText(albumsTable.getAlbum(selectedIndex).getName());
+            System.out.println("selected index: " + selectedIndex);
+            //songsNum.setText(albumsTable.getAlbum(selectedIndex).getName());
+            String selectedItem = comboName.getSelectionModel().getSelectedItem().toString();
+            System.out.println("selected item: " + selectedItem);
+            int albumsID = 0;
+            for (Albums a : albumsTable.getAllAlbums()) {
+                if (a.getName().equals(selectedItem)) {
+                    albumsID = a.getId();
+                }
+            }
+            songsNum.setText(String.valueOf(albumsTable.getAlbum(albumsID).getNumSongs()));
+            dateReleased.setText(String.valueOf(albumsTable.getAlbum(albumsID).getReleaseDate()));
+            albumLength.setText(String.valueOf(albumsTable.getAlbum(albumsID).getLength()));
+            albumPrice.setText(String.valueOf(albumsTable.getAlbum(albumsID).getPrice()));
+
+            int genreID = Integer.parseInt(albumsTable.getAlbum(albumsID).getGenreID());
+            int artistID = Integer.parseInt(albumsTable.getAlbum(albumsID).getArtistID());
+            int studioID = Integer.parseInt(albumsTable.getAlbum(albumsID).getStudioID());
+
+            String genreName = genresTable.getGenre(genreID).getGenre();
+            String artistName = artistsTable.getArtist(artistID).getArtist();
+            String studioName = studiosTable.getStudio(studioID).getStudio();
+            albumGenre.setText(genreName);
+            artistAlbum.setText(artistName);
+            studioAlbum.setText(studioName);
+
+
         });
+
 
         Button albumRemoved = new Button("Remove Album");
         albumRemoved.setAlignment(Pos.BOTTOM_LEFT);
+        returnBtn.setAlignment(Pos.BOTTOM_LEFT);
 
-
-        albumsRoot.add(albumRemoved, 0, 30);
+        albumsRoot.add(albumRemoved, 0, 8);
         albumsRoot.add(name, 0, 0);
         albumsRoot.add(comboName, 1, 0);
         albumsRoot.add(numSongs,0,1);
@@ -191,7 +236,7 @@ public class removeItem extends Tab {
         albumsRoot.add(artistAlbum, 1, 6);
         albumsRoot.add(studio,0,7);
         albumsRoot.add(studioAlbum, 1, 7);
-        albumsRoot.add(returnBtn, 0, 8);
+        albumsRoot.add(returnBtn1, 1, 8);
 
 
         /** GENRES ROOT**/
@@ -204,12 +249,16 @@ public class removeItem extends Tab {
 
         Text genre1 = new Text("Genre: ");
 
-
         genresRoot.add(genre1, 0 , 0);
         genresRoot.add(genresCombo, 1, 0);
         genresRoot.add(genreRemoved, 0, 1);
-        genresRoot.add(returnBtn, 0, 0);
+        genresRoot.add(returnBtn2, 1, 1);
 
+        genresCombo.setOnAction(e->{
+            String selectedItem = genresCombo.getSelectionModel().getSelectedItem().toString();
+
+
+        });
 
         /** ARTIST ROOT**/
         artistsRoot.setPadding(new Insets(10,10,10,10));
@@ -229,7 +278,20 @@ public class removeItem extends Tab {
         artistsRoot.add(birthday,0,1);
         artistsRoot.add(birthdayField,1,1);
         artistsRoot.add(artistRemoved, 0, 2);
-        artistsRoot.add(returnBtn, 0, 0);
+        artistsRoot.add(returnBtn, 1, 2);
+
+        artistsCombo.setOnAction(e->{
+            int selectedIndex = artistsCombo.getSelectionModel().getSelectedIndex();
+            String selectedItem = artistsCombo.getSelectionModel().getSelectedItem().toString();
+            int artistsID = 0;
+            for (Artists ar : artistsTable.getAllArtists()) {
+                if (ar.getArtist().equals(selectedItem)) {
+                    artistsID = ar.getId();
+                }
+            }
+            birthdayField.setText(String.valueOf(artistsTable.getArtist(artistsID).getBirthday()));
+
+        });
 
         /** STUDIO ROOT**/
         studiosRoot.setPadding(new Insets(10,10,10,10));
@@ -259,7 +321,20 @@ public class removeItem extends Tab {
         studiosRoot.add(dateCreatedField,1,2);
 
         studiosRoot.add(studioRemoved, 0, 10);
-        studiosRoot.add(returnBtn, 1, 10);
+        studiosRoot.add(returnBtn3, 1, 10);
+
+        studiosCombo.setOnAction(e->{
+            int selectedIndex = studiosCombo.getSelectionModel().getSelectedIndex();
+            String selectedItem = studiosCombo.getSelectionModel().getSelectedItem().toString();
+            int studiosID = 0;
+            for (Studios s : studiosTable.getAllStudios()) {
+                if (s.getStudio().equals(selectedItem)) {
+                    studiosID = s.getId();
+                }
+            }
+            dateCreatedField.setText(String.valueOf(studiosTable.getStudio(studiosID).getDateCreated()));
+
+        });
 
         this.setContent(promptRoot);
     }
