@@ -192,6 +192,31 @@ public class removeItem extends Tab {
         albumSpoiler.setFill(Paint.valueOf("00FF00"));
         albumsRoot.add(albumSpoiler,0,9);
 
+
+        //default selection data
+        int selectedIndex0 = comboName.getSelectionModel().getSelectedIndex();
+        //songsNum.setText(albumsTable.getAlbum(selectedIndex).getName());
+        String selectedItem0 = comboName.getSelectionModel().getSelectedItem().toString();
+        int albumsID0 = 0;
+        for (Albums a : albumsTable.getAllAlbums()) {
+            if (a.getName().equals(selectedItem0)) {
+                albumsID0 = a.getId();
+            }
+        }
+        songsNum.setText(String.valueOf(albumsTable.getAlbum(albumsID0).getNumSongs()));
+        dateReleased.setText(String.valueOf(albumsTable.getAlbum(albumsID0).getReleaseDate()));
+        albumLength.setText(String.valueOf(albumsTable.getAlbum(albumsID0).getLength()));
+        albumPrice.setText(String.valueOf(albumsTable.getAlbum(albumsID0).getPrice()));
+        int genreID0 = Integer.parseInt(albumsTable.getAlbum(albumsID0).getGenreID());
+        int artistID0 = Integer.parseInt(albumsTable.getAlbum(albumsID0).getArtistID());
+        int studioID0 = Integer.parseInt(albumsTable.getAlbum(albumsID0).getStudioID());
+        String genreName0 = genresTable.getGenre(genreID0).getGenre();
+        String artistName0 = artistsTable.getArtist(artistID0).getArtist();
+        String studioName0 = studiosTable.getStudio(studioID0).getStudio();
+        albumGenre.setText(genreName0);
+        artistAlbum.setText(artistName0);
+        studioAlbum.setText(studioName0);
+
         comboName.setOnAction(e-> {
             int selectedIndex = comboName.getSelectionModel().getSelectedIndex();
             System.out.println("selected index: " + selectedIndex);
@@ -331,6 +356,16 @@ public class removeItem extends Tab {
         artistsRoot.add(artistRemoved, 0, 2);
         artistsRoot.add(returnBtn, 1, 2);
 
+        int selectedIndex1 = artistsCombo.getSelectionModel().getSelectedIndex();
+        String selectedItem1 = artistsCombo.getSelectionModel().getSelectedItem().toString();
+        int artistsID1 = 0;
+        for (Artists ar : artistsTable.getAllArtists()) {
+            if (ar.getArtist().equals(selectedItem1)) {
+                artistsID1 = ar.getId();
+            }
+        }
+        birthdayField.setText(String.valueOf(artistsTable.getArtist(artistsID1).getBirthday()));
+
         artistsCombo.setOnAction(e->{
             int selectedIndex = artistsCombo.getSelectionModel().getSelectedIndex();
             String selectedItem = artistsCombo.getSelectionModel().getSelectedItem().toString();
@@ -414,6 +449,17 @@ public class removeItem extends Tab {
 
         studiosRoot.add(studioRemoved, 0, 3);
         studiosRoot.add(returnBtn3, 1, 3);
+
+        int selectedIndex2 = studiosCombo.getSelectionModel().getSelectedIndex();
+        String selectedItem2 = studiosCombo.getSelectionModel().getSelectedItem().toString();
+        int studiosID2 = 0;
+        for (Studios s : studiosTable.getAllStudios()) {
+            if (s.getStudio().equals(selectedItem2)) {
+                studiosID2 = s.getId();
+            }
+        }
+        dateCreatedField.setText(String.valueOf(studiosTable.getStudio(studiosID2).getDateCreated()));
+
 
         studiosCombo.setOnAction(e->{
             int selectedIndex = studiosCombo.getSelectionModel().getSelectedIndex();
