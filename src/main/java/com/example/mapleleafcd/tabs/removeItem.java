@@ -1,5 +1,7 @@
 package com.example.mapleleafcd.tabs;
 
+import com.example.mapleleafcd.database.DBConst;
+import com.example.mapleleafcd.database.Database;
 import com.example.mapleleafcd.pojo.Albums;
 import com.example.mapleleafcd.pojo.Artists;
 import com.example.mapleleafcd.pojo.Genres;
@@ -17,12 +19,15 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class removeItem extends Tab {
     private static removeItem instance;
+    Database db = Database.getInstance();
     private removeItem(){
         this.setText("Remove Item");
 
@@ -182,6 +187,10 @@ public class removeItem extends Tab {
         Text artistAlbum = new Text();
         Text studioAlbum = new Text();
 
+        Text albumSpoiler = new Text();
+        albumSpoiler.setVisible(false);
+        albumSpoiler.setFill(Paint.valueOf("FF0000"));
+        albumsRoot.add(albumSpoiler,0,9);
 
         comboName.setOnAction(e-> {
             int selectedIndex = comboName.getSelectionModel().getSelectedIndex();
@@ -210,14 +219,39 @@ public class removeItem extends Tab {
             albumGenre.setText(genreName);
             artistAlbum.setText(artistName);
             studioAlbum.setText(studioName);
-
-
         });
 
 
         Button albumRemoved = new Button("Remove Album");
         albumRemoved.setAlignment(Pos.BOTTOM_LEFT);
         returnBtn.setAlignment(Pos.BOTTOM_LEFT);
+
+        albumRemoved.setOnAction(e->{
+            String selectedItem = comboName.getSelectionModel().getSelectedItem().toString();
+
+            String query = "DELETE FROM " + DBConst.TABLE_ALBUMS + " WHERE " +
+                    DBConst.ALBUMS_COLUMN_NAME + " = '" + selectedItem + "'";
+            System.out.println("query: " + query);
+            try{
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                albumSpoiler.setVisible(true);
+                albumSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_ALBUMS);
+
+                //reset all values if successful query
+                songsNum.setText("");
+                dateReleased.setText("");
+                albumLength.setText("");
+                albumPrice.setText("");
+                albumGenre.setText("");
+                artistAlbum.setText("");
+                studioAlbum.setText("");
+
+            }catch(Exception e1){
+                e1.printStackTrace();
+                System.out.println("Failed to establish connection.");
+            }
+        });
 
         albumsRoot.add(albumRemoved, 0, 8);
         albumsRoot.add(name, 0, 0);
