@@ -189,7 +189,7 @@ public class removeItem extends Tab {
 
         Text albumSpoiler = new Text();
         albumSpoiler.setVisible(false);
-        albumSpoiler.setFill(Paint.valueOf("FF0000"));
+        albumSpoiler.setFill(Paint.valueOf("00FF00"));
         albumsRoot.add(albumSpoiler,0,9);
 
         comboName.setOnAction(e-> {
@@ -288,10 +288,27 @@ public class removeItem extends Tab {
         genresRoot.add(genreRemoved, 0, 1);
         genresRoot.add(returnBtn2, 1, 1);
 
-        genresCombo.setOnAction(e->{
+        Text genreSpoiler = new Text();
+        genreSpoiler.setVisible(false);
+        genreSpoiler.setFill(Paint.valueOf("00FF00"));
+        genresRoot.add(genreSpoiler,0,9);
+
+        genreRemoved.setOnAction(e->{
             String selectedItem = genresCombo.getSelectionModel().getSelectedItem().toString();
 
+            String query = "DELETE FROM " + DBConst.TABLE_GENRES + " WHERE " +
+                    DBConst.GENRES_COLUMN_GENRE + " = '" + selectedItem + "'";
+            System.out.println("query: " + query);
+            try{
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                genreSpoiler.setVisible(true);
+                genreSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_GENRES);
 
+            }catch(Exception e1){
+                e1.printStackTrace();
+                System.out.println("Failed to establish connection.");
+            }
         });
 
         /** ARTIST ROOT**/
@@ -325,6 +342,29 @@ public class removeItem extends Tab {
             }
             birthdayField.setText(String.valueOf(artistsTable.getArtist(artistsID).getBirthday()));
 
+        });
+
+        Text artistSpoiler = new Text();
+        artistSpoiler.setVisible(false);
+        artistSpoiler.setFill(Paint.valueOf("00FF00"));
+        artistsRoot.add(artistSpoiler,0,9);
+
+        artistRemoved.setOnAction(e->{
+            String selectedItem = artistsCombo.getSelectionModel().getSelectedItem().toString();
+
+            String query = "DELETE FROM " + DBConst.TABLE_ARTISTS + " WHERE " +
+                    DBConst.ARTISTS_COLUMN_ARTIST + " = '" + selectedItem + "'";
+            System.out.println("query: " + query);
+            try{
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                artistSpoiler.setVisible(true);
+                artistSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_ARTISTS);
+
+            }catch(Exception e1){
+                e1.printStackTrace();
+                System.out.println("Failed to establish connection.");
+            }
         });
 
         /** STUDIO ROOT**/
