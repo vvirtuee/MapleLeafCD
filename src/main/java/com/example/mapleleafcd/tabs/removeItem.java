@@ -372,15 +372,33 @@ public class removeItem extends Tab {
         studiosRoot.setHgap(10);
         studiosRoot.setVgap(5);
 
-
         Button studioRemoved = new Button("Remove Studio");
-        //when pressed, the studio should be removed from the array
-//        studiosCombo.setOnAction(
-//                studiosCombo.getChildrenUnmodifiable().remove(studiosTable)
-//        );
-
-
         studioRemoved.setAlignment(Pos.BOTTOM_LEFT);
+
+
+        Text studioSpoiler = new Text();
+        studioSpoiler.setVisible(false);
+        studioSpoiler.setFill(Paint.valueOf("00FF00"));
+        studiosRoot.add(studioSpoiler,0,9);
+
+        studioRemoved.setOnAction(e->{
+            String selectedItem = studiosCombo.getSelectionModel().getSelectedItem().toString();
+
+            String query = "DELETE FROM " + DBConst.TABLE_STUDIOS + " WHERE " +
+                    DBConst.STUDIOS_COLUMN_STUDIO + " = '" + selectedItem + "'";
+            System.out.println("query: " + query);
+            try{
+                Statement addItem = db.getConnection().createStatement();
+                addItem.executeUpdate(query);
+                studioSpoiler.setVisible(true);
+                studioSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_STUDIOS);
+
+            }catch(Exception e1){
+                e1.printStackTrace();
+                System.out.println("Failed to establish connection.");
+            }
+        });
+
 
         Text studio1 = new Text("Studio: ");
         Text studioField = new Text("");
@@ -394,8 +412,8 @@ public class removeItem extends Tab {
         studiosRoot.add(dateCreated,0,2);
         studiosRoot.add(dateCreatedField,1,2);
 
-        studiosRoot.add(studioRemoved, 0, 10);
-        studiosRoot.add(returnBtn3, 1, 10);
+        studiosRoot.add(studioRemoved, 0, 5);
+        studiosRoot.add(returnBtn3, 1, 5);
 
         studiosCombo.setOnAction(e->{
             int selectedIndex = studiosCombo.getSelectionModel().getSelectedIndex();
