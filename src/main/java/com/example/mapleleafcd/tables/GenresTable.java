@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 public class GenresTable implements GenresDAO {
 
-
+    private static GenresTable instance;
     Database db = Database.getInstance();
     ArrayList<Genres> genres;
 
@@ -26,11 +26,10 @@ public class GenresTable implements GenresDAO {
         genres = new ArrayList<>();
 
         try{
-            Statement getAlbums = db.getConnection().createStatement();
-            ResultSet data = getAlbums.executeQuery(query); //this part specifically sends query to table
+            Statement getGenres = db.getConnection().createStatement();
+            ResultSet data = getGenres.executeQuery(query); //this part specifically sends query to table
 
             while(data.next()){
-                System.out.println(data.getString(DBConst.GENRES_COLUMN_ID));
                 genres.add(
                         new Genres(
                                 data.getInt(DBConst.GENRES_COLUMN_ID),
@@ -46,8 +45,8 @@ public class GenresTable implements GenresDAO {
     public Genres getGenre(int id){
         String query = "SELECT * FROM " + DBConst.TABLE_GENRES + " WHERE " + DBConst.GENRES_COLUMN_ID  + " = " + id;
         try{
-            Statement getCoin = db.getConnection().createStatement();
-            ResultSet data = getCoin.executeQuery(query);
+            Statement getGenre = db.getConnection().createStatement();
+            ResultSet data = getGenre.executeQuery(query);
             if(data.next()){
                 Genres genre = new Genres(
                         data.getInt(DBConst.GENRES_COLUMN_ID),
@@ -59,4 +58,12 @@ public class GenresTable implements GenresDAO {
         }
         return null;
     }
+
+    public static GenresTable getInstance(){
+        if(instance == null){
+            instance = new GenresTable();
+        }
+        return instance;
+    }
+
 }
