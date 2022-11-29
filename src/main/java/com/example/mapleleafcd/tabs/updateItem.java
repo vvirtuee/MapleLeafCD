@@ -288,9 +288,9 @@ public class updateItem extends Tab {
         containerForItemData.add(artistText,0,7);
         containerForItemData.add(artist0,1,7);
 
-        /** Studio **/
+        /** Studio/Record Label **/
 
-        Text studioText = new Text("Studio: ");
+        Text studioText = new Text("Studio/Record Label: ");
         ComboBox studio0 = new ComboBox<>();
         ArrayList<String> listOfStudios = new ArrayList<>();
         StudiosTable studiosTable = new StudiosTable();

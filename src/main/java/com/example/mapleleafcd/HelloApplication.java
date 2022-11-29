@@ -101,7 +101,7 @@ public class HelloApplication extends Application {
         //create a tabpane
         TabPane tabPane = new TabPane();
         tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), updateItem.getInstance());
+        tabPane.getTabs().addAll(addItem.getInstance(), removeItem.getInstance(), updateItem.getInstance(), itemStats.getInstance());
         pane.setTop(signIn);
 
         //if account already exists
