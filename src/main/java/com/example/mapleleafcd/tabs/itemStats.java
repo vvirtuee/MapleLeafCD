@@ -2,8 +2,10 @@ package com.example.mapleleafcd.tabs;
 
 import com.example.mapleleafcd.database.Database;
 import com.example.mapleleafcd.pojo.Albums;
+import com.example.mapleleafcd.pojo.Artists;
 import com.example.mapleleafcd.pojo.Genres;
 import com.example.mapleleafcd.tables.AlbumsTable;
+import com.example.mapleleafcd.tables.ArtistsTable;
 import com.example.mapleleafcd.tables.GenresTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -45,10 +47,25 @@ public class itemStats extends Tab {
         typesCombo.setItems(FXCollections.observableArrayList(dataNames));
         typesCombo.getSelectionModel().selectFirst();
 
+        typesCombo.setOnAction(e->{
+            String selection = typesCombo.getSelectionModel().getSelectedItem().toString();
+            switch(selection){
+                case "Genre Diversity":
+                    generateGenresChart();
+                    break;
+                case "Rating Diversity":
+                    generateRatingsChart();
+                    break;
+                case "Artist's Birth Month Spread":
+                    generateBirthdaysChart();
+                    break;
+            }
+        });
+
         root.setLeft(typesCombo);
 
         generateGenresChart();
-        root.setRight(refresh);
+        root.setBottom(refresh);
         this.setContent(root);
     }
 
@@ -88,30 +105,180 @@ public class itemStats extends Tab {
             data.add(new PieChart.Data(key, value));
 
         }
+        ObservableList<PieChart.Data> chartData
+                = FXCollections.observableArrayList(data);
+        chart.setData(chartData);
+    }
+    public void generateRatingsChart(){
+        AlbumsTable albums = AlbumsTable.getInstance();
+
+        //Grab a list of the album types
+        ArrayList<Albums> albumsArray = AlbumsTable.getInstance().getAllAlbums();
+
+        ArrayList<PieChart.Data> data = new ArrayList<>();
+        //1. parse through the albums data
+
+        AlbumsTable albumsTable = new AlbumsTable();
+        HashMap<Integer, Integer> numTimesDataAppears = new HashMap<>();
+
+        //populate hashmap with 0s
 
         for(Albums a: albumsTable.getAllAlbums()){
-            //String key = numTimesDataAppears.keySet().;
-            //data.add(new PieChart.Data(genresTable.getGenre(numTimesDataAppears.get(a.getGenreID())).toString(), 1));
+            int rating = (int)(Math.round(a.getRating()));
+            System.out.println("rating: " + rating);
+            numTimesDataAppears.put(rating,0);
         }
 
+        //add to hashmap each time a key of the genreID thats the same is detected
+        for(Albums a: albumsTable.getAllAlbums()){
+            int rating = (int)(Math.round(a.getRating()));
+            numTimesDataAppears.put(rating, numTimesDataAppears.get(rating) + 1);
+        }
+        System.out.println("data collected: " + numTimesDataAppears);
+        System.out.println("titles collected: " + numTimesDataAppears.keySet());
 
-        /*
-        for(Albums album: albumsArray){
-            int genre = Integer.parseInt(album.getGenreID());
-            System.out.println("genres id: " + genre);
-            //PieChart.Data("name as string", "data num as double"
+        for(Map.Entry<Integer, Integer> entry: numTimesDataAppears.entrySet()){
+            //collecting the key
+            int key = entry.getKey();
+            int value = entry.getValue();
+            data.add(new PieChart.Data(String.valueOf(key), value));
 
-            System.out.println("genres name: " + genresTable.getGenre(genre));
-            data.add(new PieChart.Data(genresTable.getGenre(genre).toString(), Double.parseDouble(album.getGenreID())));
-            //data.add(new PieChart.Data(album.getArtistID(), album.getPrice()));
         }
 
-         */
         ObservableList<PieChart.Data> chartData
                 = FXCollections.observableArrayList(data);
         chart.setData(chartData);
     }
 
+    public void generateBirthdaysChart(){
+        ArtistsTable artists = ArtistsTable.getInstance();
+
+        //Grab a list of the album types
+        ArrayList<Albums> albumsArray = AlbumsTable.getInstance().getAllAlbums();
+
+        ArrayList<PieChart.Data> data = new ArrayList<>();
+        //1. parse through the albums data
+
+        ArtistsTable artistsTable = new ArtistsTable();
+        HashMap<String, Integer> numTimesDataAppears = new HashMap<>();
+
+
+        //populate hashmap with 0s
+        for(Artists ar: artistsTable.getAllArtists()){
+            //1. determine month of birth
+
+            String birthMonth = ar.getBirthday().substring(5,7);
+            String month = "";
+
+            switch(birthMonth){
+                case "01":
+                    month = "January";
+                    break;
+                case "02":
+                    month = "February";
+                    break;
+                case "03":
+                    month = "March";
+                    break;
+                case "04":
+                    month = "April";
+                    break;
+                case "05":
+                    month = "May";
+                    break;
+                case "06":
+                    month = "June";
+                    break;
+                case "07":
+                    month = "July";
+                    break;
+                case "08":
+                    month = "August";
+                    break;
+                case "09":
+                    month = "September";
+                    break;
+                case "10":
+                    month = "October";
+                    break;
+                case "11":
+                    month = "November";
+                    break;
+                case "12":
+                    month = "December";
+                    break;
+                default:
+                    month = "";
+                    break;
+            }
+
+            System.out.println("birthday month: " + month);
+
+            numTimesDataAppears.put(month,0);
+        }
+
+        //populate them
+        for(Artists ar: artistsTable.getAllArtists()){
+            String birthMonth = ar.getBirthday().substring(5,7);
+            String month = "";
+
+            switch(birthMonth){
+                case "01":
+                    month = "January";
+                    break;
+                case "02":
+                    month = "February";
+                    break;
+                case "03":
+                    month = "March";
+                    break;
+                case "04":
+                    month = "April";
+                    break;
+                case "05":
+                    month = "May";
+                    break;
+                case "06":
+                    month = "June";
+                    break;
+                case "07":
+                    month = "July";
+                    break;
+                case "08":
+                    month = "August";
+                    break;
+                case "09":
+                    month = "September";
+                    break;
+                case "10":
+                    month = "October";
+                    break;
+                case "11":
+                    month = "November";
+                    break;
+                case "12":
+                    month = "December";
+                    break;
+                default:
+                    month = "";
+                    break;
+            }
+
+            numTimesDataAppears.put(month,numTimesDataAppears.get(month) + 1);
+        }
+
+        for(Map.Entry<String, Integer> entry: numTimesDataAppears.entrySet()){
+            //collecting the key
+            String key = entry.getKey();
+            int value = entry.getValue();
+            data.add(new PieChart.Data(key, value));
+
+        }
+
+        ObservableList<PieChart.Data> chartData
+                = FXCollections.observableArrayList(data);
+        chart.setData(chartData);
+    }
 
     public static itemStats getInstance(){
         if(instance == null){
