@@ -59,6 +59,9 @@ public class itemStats extends Tab {
                 case "Artist's Birth Month Spread":
                     generateBirthdaysChart();
                     break;
+                case "# of Albums per decade":
+                    generateDecadesChart();
+                    break;
             }
         });
 
@@ -266,6 +269,95 @@ public class itemStats extends Tab {
 
             numTimesDataAppears.put(month,numTimesDataAppears.get(month) + 1);
         }
+
+        for(Map.Entry<String, Integer> entry: numTimesDataAppears.entrySet()){
+            //collecting the key
+            String key = entry.getKey();
+            int value = entry.getValue();
+            data.add(new PieChart.Data(key, value));
+
+        }
+
+        ObservableList<PieChart.Data> chartData
+                = FXCollections.observableArrayList(data);
+        chart.setData(chartData);
+    }
+
+    public void generateDecadesChart(){
+        AlbumsTable albumsTable = AlbumsTable.getInstance();
+
+        //Grab a list of the album types
+        ArrayList<Albums> albumsArray = AlbumsTable.getInstance().getAllAlbums();
+
+        ArrayList<PieChart.Data> data = new ArrayList<>();
+        //1. parse through the albums data
+
+        HashMap<String, Integer> numTimesDataAppears = new HashMap<>();
+
+
+        //populate hashmap with 0s
+        for(Albums a: albumsTable.getAllAlbums()){
+            //1. determine month of birth
+
+            int eraNum = Integer.parseInt(a.getReleaseDate().substring(0,2));
+
+            String era = "";
+
+            if(eraNum < 19){
+                era = "Pre-Modern";
+            }else if(eraNum == 19){
+                eraNum = Integer.parseInt(a.getReleaseDate().substring(2,4));
+                if(eraNum < 10){
+                    era = "10s";
+                }else{
+                    eraNum = Integer.parseInt(a.getReleaseDate().substring(2,3));
+                    era = String.valueOf(eraNum) + "0s";
+                }
+            }else{  //ie. it's the 2000s
+                eraNum = Integer.parseInt(a.getReleaseDate().substring(2,4));
+                if(eraNum < 10){
+                    era = "'00s";
+                }else{
+                    eraNum = Integer.parseInt(a.getReleaseDate().substring(2,3));
+                    era = "'" + String.valueOf(eraNum) + "0s";
+                }
+            }
+
+            numTimesDataAppears.put(era,0);
+        }
+
+        //populate them
+
+        for(Albums a: albumsTable.getAllAlbums()){
+            //1. determine month of birth
+
+            int eraNum = Integer.parseInt(a.getReleaseDate().substring(0,2));
+
+            String era = "";
+
+            if(eraNum < 19){
+                era = "Pre-Modern";
+            }else if(eraNum == 19){
+                eraNum = Integer.parseInt(a.getReleaseDate().substring(2,4));
+                if(eraNum < 10){
+                    era = "10s";
+                }else{
+                    eraNum = Integer.parseInt(a.getReleaseDate().substring(2,3));
+                    era = String.valueOf(eraNum) + "0s";
+                }
+            }else{  //ie. it's the 2000s
+                eraNum = Integer.parseInt(a.getReleaseDate().substring(2,4));
+                if(eraNum < 10){
+                    era = "'00s";
+                }else{
+                    eraNum = Integer.parseInt(a.getReleaseDate().substring(2,3));
+                    era = "'" + String.valueOf(eraNum) + "0s";
+                }
+            }
+
+            numTimesDataAppears.put(era,numTimesDataAppears.get(era) + 1);
+        }
+
 
         for(Map.Entry<String, Integer> entry: numTimesDataAppears.entrySet()){
             //collecting the key
