@@ -15,6 +15,7 @@ import com.example.mapleleafcd.tables.StudiosTable;
 import com.example.mapleleafcd.verifications.Verifier;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -41,10 +42,33 @@ public class addItem extends Tab {
     GridPane artistsRoot = new GridPane();
     GridPane studiosRoot = new GridPane();
 
+    //Buttons for going back to the root
+    Button returnBtn = new Button("Return");
+    Button returnBtn1 = new Button("Return");
+    Button returnBtn2 = new Button("Return");
+    Button returnBtn3 = new Button("Return");
+
 
     Database db = Database.getInstance();
     private addItem(){
         this.setText("Add Item");
+
+        //Functionality of the return buttons
+        returnBtn.setOnAction(e->{
+            this.setContent(root.getPrompt());
+        });
+
+        returnBtn1.setOnAction(e->{
+            this.setContent(root.getPrompt());
+        });
+
+        returnBtn2.setOnAction(e->{
+            this.setContent(root.getPrompt());
+        });
+
+        returnBtn3.setOnAction(e->{
+            this.setContent(root.getPrompt());
+        });
 
         //initialize prompt control
         root.initializePrompt(this, albumsRoot, genresRoot, artistsRoot, studiosRoot);
@@ -212,6 +236,8 @@ public class addItem extends Tab {
         albumsRoot.add(ratingContainerBEHIND, 1, 5);
         albumsRoot.add(ratingContainerINFRONT,1,5);
 
+        albumsRoot.add(returnBtn, 1, 9);
+        returnBtn.setAlignment(Pos.BOTTOM_CENTER);
 
         /** Genre **/
 
@@ -341,6 +367,8 @@ public class addItem extends Tab {
         genresRoot.setPadding(new Insets(10,10,10,10));
         genresRoot.setHgap(10);
         genresRoot.setVgap(10);
+        genresRoot.add(returnBtn1, 1, 1);
+        returnBtn1.setAlignment(Pos.BOTTOM_CENTER);
 
         /** Genre Name **/
         Text genreText1 = new Text("Genres: ");
@@ -391,6 +419,7 @@ public class addItem extends Tab {
         artistsRoot.setPadding(new Insets(10,10,10,10));
         artistsRoot.setHgap(10);
         artistsRoot.setVgap(10);
+        artistsRoot.add(returnBtn2, 1, 2);
 
         /** Artist Name **/
 
@@ -457,6 +486,8 @@ public class addItem extends Tab {
         studiosRoot.setPadding(new Insets(10,10,10,10));
         studiosRoot.setHgap(10);
         studiosRoot.setVgap(10);
+        studiosRoot.add(returnBtn3, 1, 2);
+        returnBtn3.setAlignment(Pos.BOTTOM_CENTER);
 
         /** Studio Name **/
 

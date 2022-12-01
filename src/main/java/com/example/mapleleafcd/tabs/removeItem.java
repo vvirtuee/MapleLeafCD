@@ -45,18 +45,15 @@ public class removeItem extends Tab {
 
         Text prompt = new Text("Please select a table to remove an item from:");
 
-        //Buttons for remove item
+        //Buttons for remove item, return buttons
         Button albumsBtn = new Button("Albums");
         Button genresBtn = new Button("Genres");
         Button artistsBtn = new Button("Artists");
         Button studiosBtn = new Button("Studios");
 
         Button returnBtn = new Button("Return");
-
         Button returnBtn1 = new Button("Return");
-
         Button returnBtn2 = new Button("Return");
-
         Button returnBtn3 = new Button("Return");
 
         promptRoot.add(prompt,0,0);

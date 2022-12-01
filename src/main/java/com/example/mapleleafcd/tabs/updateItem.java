@@ -74,6 +74,11 @@ public class updateItem extends Tab {
         Button studiosBtn = new Button("Studios");
         promptRoot.add(prompt,0,0);
 
+        Button returnBtn = new Button("Return");
+        Button returnBtn1 = new Button("Return");
+        Button returnBtn2 = new Button("Return");
+        Button returnBtn3 = new Button("Return");
+
         albumsBtn.setOnAction(e->{
             this.setContent(albumsRoot);
         });
@@ -85,6 +90,22 @@ public class updateItem extends Tab {
         });
         studiosBtn.setOnAction(e->{
             this.setContent(studiosRoot);
+        });
+
+        returnBtn.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
+        returnBtn1.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
+        returnBtn2.setOnAction(e->{
+            this.setContent(promptRoot);
+        });
+
+        returnBtn3.setOnAction(e->{
+            this.setContent(promptRoot);
         });
 
         HBox promptVBox = new HBox();
@@ -149,6 +170,7 @@ public class updateItem extends Tab {
 
         containerForItemData.add(nameText, 0, 0);
         containerForItemData.add(albumName, 1, 0);
+        albumsRoot.add(returnBtn, 0, 3);
 
         /** Num Songs **/
         Text numSongsText = new Text("# Songs: ");
@@ -272,6 +294,7 @@ public class updateItem extends Tab {
         genre0.getSelectionModel().selectFirst();
         containerForItemData.add(genreText,0,6);
         containerForItemData.add(genre0,1,6);
+        genresRoot.add(returnBtn1, 0, 3);
 
         /** Artist **/
 
@@ -512,6 +535,7 @@ public class updateItem extends Tab {
         containerForArtists.add(birthdayField, 1, 1);
 
         containerForArtists.add(submit3,0,2);
+        artistsRoot.add(returnBtn2, 0, 3);
 
         table3.setOnMouseClicked(e->{
             if(!artistsRoot.getChildren().contains(containerForArtists)){
@@ -597,6 +621,7 @@ public class updateItem extends Tab {
         containerForStudios.add(dateCreatedField, 1, 1);
 
         containerForStudios.add(submit4,0,2);
+        studiosRoot.add(returnBtn3, 0, 3);
 
         table4.setOnMouseClicked(e->{
             if(!studiosRoot.getChildren().contains(containerForStudios)){

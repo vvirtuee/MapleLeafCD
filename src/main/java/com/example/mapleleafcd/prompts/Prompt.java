@@ -8,9 +8,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
 public class Prompt {
+    GridPane prompt = new GridPane();
 
     public GridPane initializePrompt(Tab t, GridPane albumsRoot, GridPane genresRoot, GridPane artistsRoot, GridPane studiosRoot){
-        GridPane prompt = new GridPane();
         prompt.setPadding(new Insets(10,10,10,10));
         prompt.setVgap(10);
         prompt.setHgap(10);
@@ -32,6 +32,9 @@ public class Prompt {
         promptVBox.getChildren().addAll(albumsBtn,genresBtn,artistsBtn,studiosBtn);
         prompt.add(promptVBox,0,1);
 
+        return prompt;
+    }
+    public GridPane getPrompt(){
         return prompt;
     }
 }
