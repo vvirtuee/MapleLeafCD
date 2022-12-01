@@ -9,6 +9,7 @@ import com.example.mapleleafcd.tables.ArtistsTable;
 import com.example.mapleleafcd.tables.GenresTable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -36,6 +37,7 @@ public class itemStats extends Tab {
         refresh.setOnAction(e->{
             generateGenresChart();
         });
+        root.setPadding(new Insets(10,10,10,10));
 
         //ComboBox
         ComboBox typesCombo = new ComboBox();
