@@ -271,8 +271,38 @@ public class removeItem extends Tab {
 
             }catch(Exception e1){
                 e1.printStackTrace();
-                System.out.println("Failed to establish connection.");
             }
+
+            //refreshing of comboboxes
+            listOfAlbums.clear();
+            for(Albums album : albumsTable.getAllAlbums()){
+                listOfAlbums.add(album.getName());
+            }
+            comboName.setItems(FXCollections.observableArrayList(listOfAlbums));
+            comboName.getSelectionModel().selectFirst();
+
+            listOfGenres.clear();
+            for(Genres genre1 : genresTable.getAllGenres()){
+                listOfGenres.add(genre1.getGenre());
+            }
+            genresCombo.setItems(FXCollections.observableArrayList(listOfGenres));
+            genresCombo.getSelectionModel().selectFirst();
+
+            listOfArtists.clear();
+            for(Artists artist1 : artistsTable.getAllArtists()){
+                listOfArtists.add(artist1.getArtist());
+            }
+            artistsCombo.setItems(FXCollections.observableArrayList(listOfArtists));
+            artistsCombo.getSelectionModel().selectFirst();
+
+            listOfStudios.clear();
+            for(Studios studio1 : studiosTable.getAllStudios()){
+                listOfStudios.add(studio1.getStudio());
+            }
+            studiosCombo.setItems(FXCollections.observableArrayList(listOfStudios));
+            studiosCombo.getSelectionModel().selectFirst();
+
+
         });
 
         albumsRoot.add(albumRemoved, 0, 8);
@@ -324,13 +354,47 @@ public class removeItem extends Tab {
             try{
                 Statement addItem = db.getConnection().createStatement();
                 addItem.executeUpdate(query);
+                genreSpoiler.setFill(Paint.valueOf("00FF00"));
                 genreSpoiler.setVisible(true);
                 genreSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_GENRES);
 
             }catch(Exception e1){
                 e1.printStackTrace();
-                System.out.println("Failed to establish connection.");
+                /** notice **/
+                genreSpoiler.setVisible(true);
+                genreSpoiler.setFill(Paint.valueOf("FF0000"));
+                genreSpoiler.setText("Failed. Unable to remove " + selectedItem + " from " + DBConst.TABLE_GENRES + " because other albums reference it.");
             }
+
+            //refreshing of comboboxes
+            listOfAlbums.clear();
+            for(Albums album : albumsTable.getAllAlbums()){
+                listOfAlbums.add(album.getName());
+            }
+            comboName.setItems(FXCollections.observableArrayList(listOfAlbums));
+            comboName.getSelectionModel().selectFirst();
+
+            listOfGenres.clear();
+            for(Genres genre2 : genresTable.getAllGenres()){
+                listOfGenres.add(genre2.getGenre());
+            }
+            genresCombo.setItems(FXCollections.observableArrayList(listOfGenres));
+            genresCombo.getSelectionModel().selectFirst();
+
+            listOfArtists.clear();
+            for(Artists artist1 : artistsTable.getAllArtists()){
+                listOfArtists.add(artist1.getArtist());
+            }
+            artistsCombo.setItems(FXCollections.observableArrayList(listOfArtists));
+            artistsCombo.getSelectionModel().selectFirst();
+
+            listOfStudios.clear();
+            for(Studios studio1 : studiosTable.getAllStudios()){
+                listOfStudios.add(studio1.getStudio());
+            }
+            studiosCombo.setItems(FXCollections.observableArrayList(listOfStudios));
+            studiosCombo.getSelectionModel().selectFirst();
+
         });
 
         /** ARTIST ROOT**/
@@ -390,13 +454,47 @@ public class removeItem extends Tab {
             try{
                 Statement addItem = db.getConnection().createStatement();
                 addItem.executeUpdate(query);
+                artistSpoiler.setFill(Paint.valueOf("00FF00"));
                 artistSpoiler.setVisible(true);
                 artistSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_ARTISTS);
 
             }catch(Exception e1){
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
+                genreSpoiler.setVisible(true);
+                genreSpoiler.setFill(Paint.valueOf("FF0000"));
+                genreSpoiler.setText("Failed. Unable to remove " + selectedItem + " from " + DBConst.TABLE_ARTISTS + " because other albums reference it.");
+
             }
+
+            //refreshing of comboboxes
+            listOfAlbums.clear();
+            for(Albums album : albumsTable.getAllAlbums()){
+                listOfAlbums.add(album.getName());
+            }
+            comboName.setItems(FXCollections.observableArrayList(listOfAlbums));
+            comboName.getSelectionModel().selectFirst();
+
+            listOfGenres.clear();
+            for(Genres genre2 : genresTable.getAllGenres()){
+                listOfGenres.add(genre2.getGenre());
+            }
+            genresCombo.setItems(FXCollections.observableArrayList(listOfGenres));
+            genresCombo.getSelectionModel().selectFirst();
+
+            listOfArtists.clear();
+            for(Artists artist2 : artistsTable.getAllArtists()){
+                listOfArtists.add(artist2.getArtist());
+            }
+            artistsCombo.setItems(FXCollections.observableArrayList(listOfArtists));
+            artistsCombo.getSelectionModel().selectFirst();
+
+            listOfStudios.clear();
+            for(Studios studio1 : studiosTable.getAllStudios()){
+                listOfStudios.add(studio1.getStudio());
+            }
+            studiosCombo.setItems(FXCollections.observableArrayList(listOfStudios));
+            studiosCombo.getSelectionModel().selectFirst();
         });
 
         /** STUDIO ROOT**/
@@ -422,13 +520,47 @@ public class removeItem extends Tab {
             try{
                 Statement addItem = db.getConnection().createStatement();
                 addItem.executeUpdate(query);
+                //studioSpoiler.setFill(Paint.valueOf("00FF00"));
                 studioSpoiler.setVisible(true);
                 studioSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_STUDIOS);
 
             }catch(Exception e1){
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
+                genreSpoiler.setVisible(true);
+                genreSpoiler.setFill(Paint.valueOf("FF0000"));
+                genreSpoiler.setText("Failed. Unable to remove " + selectedItem + " from " + DBConst.TABLE_STUDIOS + " because other albums reference it.");
+
             }
+
+            //refreshing of comboboxes
+            listOfAlbums.clear();
+            for(Albums album : albumsTable.getAllAlbums()){
+                listOfAlbums.add(album.getName());
+            }
+            comboName.setItems(FXCollections.observableArrayList(listOfAlbums));
+            comboName.getSelectionModel().selectFirst();
+
+            listOfGenres.clear();
+            for(Genres genre2 : genresTable.getAllGenres()){
+                listOfGenres.add(genre2.getGenre());
+            }
+            genresCombo.setItems(FXCollections.observableArrayList(listOfGenres));
+            genresCombo.getSelectionModel().selectFirst();
+
+            listOfArtists.clear();
+            for(Artists artist2 : artistsTable.getAllArtists()){
+                listOfArtists.add(artist2.getArtist());
+            }
+            artistsCombo.setItems(FXCollections.observableArrayList(listOfArtists));
+            artistsCombo.getSelectionModel().selectFirst();
+
+            listOfStudios.clear();
+            for(Studios studio1 : studiosTable.getAllStudios()){
+                listOfStudios.add(studio1.getStudio());
+            }
+            studiosCombo.setItems(FXCollections.observableArrayList(listOfStudios));
+            studiosCombo.getSelectionModel().selectFirst();
         });
 
 
@@ -468,6 +600,21 @@ public class removeItem extends Tab {
                 }
             }
             dateCreatedField.setText(String.valueOf(studiosTable.getStudio(studiosID).getDateCreated()));
+
+        });
+
+        //each time tab is switched
+        this.setOnSelectionChanged(e->{
+
+            //remove all spoilers for albums
+
+            /** Spoilers **/
+            albumSpoiler.setVisible(false);
+            studioSpoiler.setVisible(false);
+            genreSpoiler.setVisible(false);
+            artistSpoiler.setVisible(false);
+
+            this.setContent(promptRoot);
 
         });
 

@@ -359,6 +359,32 @@ public class addItem extends Tab {
                 System.out.println("Failed to establish connection.");
             }
 
+            //refresh comboboxes
+            listOfGenres.clear();
+            for(Genres name : genresTable.getAllGenres()){
+                listOfGenres.add(name.getGenre());
+            }
+            genre.setItems(FXCollections.observableArrayList(listOfGenres));
+            genre.getSelectionModel().selectFirst();
+
+            /** Artist **/
+
+            listOfArtists.clear();
+            for(Artists name : artistsTable.getAllArtists()){
+                listOfArtists.add(name.getArtist());
+            }
+            artist.setItems(FXCollections.observableArrayList(listOfArtists));
+            artist.getSelectionModel().selectFirst();
+
+            /** Studio **/
+            listOfStudios.clear();
+            for(Studios name : studiosTable.getAllStudios()){
+                listOfStudios.add(name.getStudio());
+            }
+
+            studio.setItems(FXCollections.observableArrayList(listOfStudios));
+            studio.getSelectionModel().selectFirst();
+
         });
 
         albumsRoot.add(submit, 0,9);
@@ -413,6 +439,32 @@ public class addItem extends Tab {
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
+
+            //refresh comboboxes
+            listOfGenres.clear();
+            for(Genres name : genresTable.getAllGenres()){
+                listOfGenres.add(name.getGenre());
+            }
+            genre.setItems(FXCollections.observableArrayList(listOfGenres));
+            genre.getSelectionModel().selectFirst();
+
+            /** Artist **/
+
+            listOfArtists.clear();
+            for(Artists name : artistsTable.getAllArtists()){
+                listOfArtists.add(name.getArtist());
+            }
+            artist.setItems(FXCollections.observableArrayList(listOfArtists));
+            artist.getSelectionModel().selectFirst();
+
+            /** Studio **/
+            listOfStudios.clear();
+            for(Studios name : studiosTable.getAllStudios()){
+                listOfStudios.add(name.getStudio());
+            }
+
+            studio.setItems(FXCollections.observableArrayList(listOfStudios));
+            studio.getSelectionModel().selectFirst();
         });
 
         /** ARTIST ROOT **/
@@ -480,6 +532,32 @@ public class addItem extends Tab {
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
+
+            //refresh comboboxes
+            listOfGenres.clear();
+            for(Genres name : genresTable.getAllGenres()){
+                listOfGenres.add(name.getGenre());
+            }
+            genre.setItems(FXCollections.observableArrayList(listOfGenres));
+            genre.getSelectionModel().selectFirst();
+
+            /** Artist **/
+
+            listOfArtists.clear();
+            for(Artists name : artistsTable.getAllArtists()){
+                listOfArtists.add(name.getArtist());
+            }
+            artist.setItems(FXCollections.observableArrayList(listOfArtists));
+            artist.getSelectionModel().selectFirst();
+
+            /** Studio **/
+            listOfStudios.clear();
+            for(Studios name : studiosTable.getAllStudios()){
+                listOfStudios.add(name.getStudio());
+            }
+
+            studio.setItems(FXCollections.observableArrayList(listOfStudios));
+            studio.getSelectionModel().selectFirst();
         });
 
         /** STUDIOS ROOT **/
@@ -549,6 +627,32 @@ public class addItem extends Tab {
                 e1.printStackTrace();
                 System.out.println("Failed to establish connection.");
             }
+
+            //refresh comboboxes
+            listOfGenres.clear();
+            for(Genres name : genresTable.getAllGenres()){
+                listOfGenres.add(name.getGenre());
+            }
+            genre.setItems(FXCollections.observableArrayList(listOfGenres));
+            genre.getSelectionModel().selectFirst();
+
+            /** Artist **/
+
+            listOfArtists.clear();
+            for(Artists name : artistsTable.getAllArtists()){
+                listOfArtists.add(name.getArtist());
+            }
+            artist.setItems(FXCollections.observableArrayList(listOfArtists));
+            artist.getSelectionModel().selectFirst();
+
+            /** Studio **/
+            listOfStudios.clear();
+            for(Studios name : studiosTable.getAllStudios()){
+                listOfStudios.add(name.getStudio());
+            }
+
+            studio.setItems(FXCollections.observableArrayList(listOfStudios));
+            studio.getSelectionModel().selectFirst();
         });
 
         //each time tab is switched
