@@ -7,6 +7,8 @@ import com.example.mapleleafcd.tabs.itemStats;
 import com.example.mapleleafcd.tabs.removeItem;
 import com.example.mapleleafcd.tabs.updateItem;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -19,6 +21,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.stage.PopupWindow;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -87,6 +92,28 @@ public class HelloApplication extends Application {
         //build Menu items
         Menu fileMenu = new Menu("File");
         Menu creditsMenu = new Menu("Credits");
+        MenuItem creditsItem = new MenuItem("Credits");
+        creditsMenu.getItems().add(creditsItem);
+
+        creditsItem.setOnAction(e->{
+
+            Stage popupWindow =new Stage();
+            popupWindow.initModality(Modality.APPLICATION_MODAL);
+            popupWindow.setTitle("Credits");
+            Label label1= new Label("Dalton Virtue");
+            Label label2= new Label("Andre Arnaut");
+
+
+            VBox layout= new VBox(10);
+            layout.getChildren().addAll(label1, label2);
+            layout.setAlignment(Pos.CENTER);
+            Scene scene1= new Scene(layout, 300, 250);
+            popupWindow.setScene(scene1);
+
+            popupWindow.showAndWait();
+
+        });
+
 
         MenuItem exit = new MenuItem("Exit");
         exit.setOnAction(e->{
@@ -97,6 +124,7 @@ public class HelloApplication extends Application {
 
         //here we are adding file menu and credits menu to the top menu bar
         menu.getMenus().addAll(fileMenu, creditsMenu);
+
 
         //create a tabpane
         TabPane tabPane = new TabPane();
