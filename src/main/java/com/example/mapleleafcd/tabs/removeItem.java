@@ -521,7 +521,7 @@ public class removeItem extends Tab {
                 Statement addItem = db.getConnection().createStatement();
                 addItem.executeUpdate(query);
                 studioSpoiler.setFill(Paint.valueOf("00FF00"));
-                studioSpoiler.setVisible(true);
+                studioSpoiler.setVisible(false);
                 studioSpoiler.setText("Removed " + selectedItem + " from " + DBConst.TABLE_STUDIOS);
 
             }catch(Exception e1){
