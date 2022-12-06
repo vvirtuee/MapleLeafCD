@@ -34,7 +34,7 @@ javafx {
 }
 
 dependencies {
-
+    implementation 'mysql:mysql-connector-java:8.0.30'
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
