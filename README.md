@@ -1,19 +1,26 @@
 Authors: Dalton Virtue, Andre Arnaut
 
-Title: Maple Leaf CDs
+Title: Maple Leaf CD
 
-Description: Database for CDs, vinyls, cassettes.
+Description: Database for CDs implemented for a CD store owner.
 
-Guide: TBA
+Guide:
+1. pull application from Github
+2. Run in IntelliJ IDE
 
-Prerequisites: JVM to run application
+Prerequisites: JVM to run application, JavaFX
 
-Screenshots/GIFS: TBA
+Screenshots/GIFS:
+<img width="1440" alt="Screen Shot 2022-12-06 at 1 01 40 PM" src="https://user-images.githubusercontent.com/114676663/205991967-680a6199-6be9-4583-bffe-26ea5446b244.png">
 
-Database Schemas: Album Table, Artist Table, Studio Table, Spec Table
+<img width="1440" alt="Screen Shot 2022-12-06 at 1 10 51 PM" src="https://user-images.githubusercontent.com/114676663/205992025-0b61b2f0-6854-4809-925f-40ae54867c6c.png">
 
-Compatbility Chart: TBA
+<img width="1440" alt="Screen Shot 2022-12-06 at 1 11 47 PM" src="https://user-images.githubusercontent.com/114676663/205992106-b01b0817-cf1f-4da4-8f6c-9ee24357023e.png">
 
-Licenses: TBA
+Database Schemas: Album Table, Genre Table, Artist Table, Studio Table
 
-Acknowledgements: TBA
+Compatbility Chart: JavaFX v.16
+
+Licenses: N/A
+
+Acknowledgements: N/A
